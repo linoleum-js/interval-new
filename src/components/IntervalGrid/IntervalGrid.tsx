@@ -15,11 +15,11 @@ export interface IGridDimensions {
   stepSizeInPixels: number;
 }
 
-export interface IIntervalGridProps {
+export interface IGridProps {
   list: Array<IIntervalItemData>;
 }
 
-const IntervalGrid = (props: IIntervalGridProps) => {
+const IntervalGrid = (props: IGridProps) => {
   const { list } = props;
   const wrapperElement = useRef<HTMLDivElement>(null);
 

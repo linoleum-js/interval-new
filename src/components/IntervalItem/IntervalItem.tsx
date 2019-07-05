@@ -5,22 +5,31 @@ import css from './IntervalItem.module.css';
 import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
 import IntervalItemHandle, { Direction } from '../IntervalItemHandle/IntervalItemHandle';
 
+export enum ActivityType {
+  Empty,
+  Work,
+  Lunch,
+  Break
+}
+
 export interface IIntervalItemData {
   start: number;
   end: number;
-  type: number;
+  type: ActivityType;
   id: string;
 }
-
-const colors: any = {
-  1: 'red',
-  2: 'green'
-};
 
 export interface IIntervalItemProps {
   data: IIntervalItemData;
   gridDimensions: IGridDimensions;
 }
+
+export const activityColor = {
+  [ActivityType.Empty]: 'transparent',
+  [ActivityType.Work]: 'rgb(72, 189, 84)',
+  [ActivityType.Lunch]: 'rgb(255, 189, 72)',
+  [ActivityType.Break]: 'rgb(255, 189, 72)',
+};
 
 const IntervalItem = (props: IIntervalItemProps) => {
   const { data, gridDimensions } = props;
@@ -34,7 +43,7 @@ const IntervalItem = (props: IIntervalItemProps) => {
   const style: CSSProperties = {
     left: toPixels(start),
     width: toPixels(end - start),
-    backgroundColor: colors[type],
+    backgroundColor: activityColor[type],
   };
 
   console.log('style', style);
@@ -45,9 +54,11 @@ const IntervalItem = (props: IIntervalItemProps) => {
   >
     <IntervalItemHandle
       direction={Direction.Left}
+      value={start}
     />
     <IntervalItemHandle
       direction={Direction.Right}
+      value={end}
     />
   </div>;
 };
