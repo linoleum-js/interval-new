@@ -58,8 +58,6 @@ const IntervalGrid = (props: IIntervalGridProps) => {
     };
   });
 
-  console.log(gridDimensions.stepSizeInPixels);
-
   return <div
     ref={wrapperElement}
   >

@@ -3,7 +3,7 @@ import React, { StyleHTMLAttributes, CSSProperties } from 'react';
 
 import css from './IntervalItem.module.css';
 import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
-import { string } from 'prop-types';
+import IntervalItemHandle, { Direction } from '../IntervalItemHandle/IntervalItemHandle';
 
 export interface IIntervalItemData {
   start: number;
@@ -26,6 +26,7 @@ const IntervalItem = (props: IIntervalItemProps) => {
   const { data, gridDimensions } = props;
   const { start, end, type } = data;
   const { stepSizeInPixels, stepSizeInMs } = gridDimensions;
+
   const toPixels = (value: number): number => {
     return value / stepSizeInMs * stepSizeInPixels;
   };
@@ -34,7 +35,6 @@ const IntervalItem = (props: IIntervalItemProps) => {
     left: toPixels(start),
     width: toPixels(end - start),
     backgroundColor: colors[type],
-    height: 20
   };
 
   console.log('style', style);
@@ -43,6 +43,12 @@ const IntervalItem = (props: IIntervalItemProps) => {
     className={css.IntervalItem}
     style={style}
   >
+    <IntervalItemHandle
+      direction={Direction.Left}
+    />
+    <IntervalItemHandle
+      direction={Direction.Right}
+    />
   </div>;
 };
 
