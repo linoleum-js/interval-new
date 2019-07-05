@@ -4,13 +4,13 @@ import './App.css';
 import IntervalGrid from './components/IntervalGrid/IntervalGrid';
 
 const list = [{
-  start: 0,
-  end: 10,
+  start: 0 * 60 * 1000,
+  end: 60 * 60 * 1000,
   type: 1,
   id: '1'
 }, {
-  start: 20,
-  end: 30,
+  start: 70 * 60 * 1000,
+  end: 120 * 60 * 1000,
   type: 2,
   id: '2'
 }];
