@@ -3,7 +3,8 @@ import React, { StyleHTMLAttributes, CSSProperties } from 'react';
 
 import css from './IntervalItem.module.css';
 import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
-import IntervalItemHandle, { Direction } from '../IntervalItemHandle/IntervalItemHandle';
+import IntervalItemHandle from '../IntervalItemHandle/IntervalItemHandle';
+import { Direction } from '../../models/Direction';
 
 export enum ActivityType {
   Empty,
@@ -46,19 +47,21 @@ const IntervalItem = (props: IIntervalItemProps) => {
     backgroundColor: activityColor[type],
   };
 
-  console.log('style', style);
-  
   return <div
     className={css.IntervalItem}
     style={style}
   >
     <IntervalItemHandle
       direction={Direction.Left}
+      gridDimensions={gridDimensions}
       value={start}
+      onResize={(data) => { console.log(data); }}
     />
     <IntervalItemHandle
       direction={Direction.Right}
+      gridDimensions={gridDimensions}
       value={end}
+      onResize={(data) => { console.log(data); }}
     />
   </div>;
 };

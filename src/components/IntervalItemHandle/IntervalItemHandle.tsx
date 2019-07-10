@@ -1,45 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { msToHHMM, getMovementdata } from '../../util/util';
+import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
 
 import css from './IntervalItemHandle.module.css';
-
-export enum Direction {
-  Left,
-  Right
-}
+import { Direction } from '../../models/Direction';
+import { MovementData } from '../../models/MovementData';
 
 export interface IIntervalItemHandleProps {
   direction: Direction;
+  gridDimensions: IGridDimensions;
   value: number;
+  onResize: (data: MovementData) => void;
 }
 
 const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
   const { direction, value } = props;
+  const [a, setA] = useState(0);
+  const [staticData, setStaticData] = useState({
+    isDragging: false,
+    lastX: 0
+  });
+  
   const getDirectionClassName = (): string => {
     return direction === Direction.Left ?
       css.IntervalItemHandleLeft :
       css.IntervalItemHandleRight;
   };
 
-  const pad2 = (value: string) => {
-    return value.length === 2 ? value : `0${value}`;
+  const onPointerUp = () => {
+    staticData.isDragging = false;
   };
 
-  const formatTime = (timeMs: number): string => {
-    const msInMinute = 60 * 1000;
-    const totalMinutes = timeMs / msInMinute;
-    const hours = String(Math.floor(totalMinutes / 60));
-    const minutes = String(Math.floor(totalMinutes % 60));
-    return `${pad2(hours)}:${pad2(minutes)}`;
+  const onPointerDown = (event: React.PointerEvent) => {
+    const { pageX } = event;
+    setStaticData({
+      lastX: pageX,
+      isDragging: true
+    })
+    // staticData.lastX = pageX;
+    // staticData.isDragging = true;
   };
+
+  const onMouseMove = (event: MouseEvent) => {
+    if (!staticData.isDragging) {
+      return;
+    }
+
+    const { pageX } = event;
+    const { gridDimensions, onResize } = props;
+    const { stepSizeInPixels } = gridDimensions;
+    const movementData: MovementData = getMovementdata(
+      pageX, staticData.lastX, stepSizeInPixels
+    );
+    const { distanceInSteps, direction, lastX } = movementData;
+
+    if (distanceInSteps) {
+      setStaticData({
+        isDragging: true,
+        lastX: lastX
+      });
+      onResize(movementData);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('pointerup', onPointerUp);
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('pointerup', onPointerUp);
+    };
+  });
 
   return <div
     className={`${css.IntervalItemHandle} ${getDirectionClassName()}`}
   >
     <div
       className={css.IntervalItemHandleBody}
+      onPointerDown={onPointerDown}
     >
-      {formatTime(value)}
+      {msToHHMM(value)}
     </div>
+    <div style={{ display: 'none' }}>{a}</div>
   </div>
 };
 
