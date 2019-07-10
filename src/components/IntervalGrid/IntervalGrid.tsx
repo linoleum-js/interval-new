@@ -13,6 +13,7 @@ export interface IGridDimensions {
   numberOfSteps: number;
   widthInPixels: number;
   stepSizeInPixels: number;
+  msInDay: number;
 }
 
 export interface IGridProps {
@@ -33,7 +34,8 @@ const IntervalGrid = (props: IGridProps) => {
       stepSizeInMs,
       numberOfSteps,
       widthInPixels,
-      stepSizeInPixels
+      stepSizeInPixels,
+      msInDay
     };
   };
 

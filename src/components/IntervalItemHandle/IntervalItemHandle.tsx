@@ -34,12 +34,12 @@ const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
 
   const onPointerDown = (event: React.PointerEvent) => {
     const { pageX } = event;
-    setStaticData({
-      lastX: pageX,
-      isDragging: true
-    })
-    // staticData.lastX = pageX;
-    // staticData.isDragging = true;
+    // setStaticData({
+    //   lastX: pageX,
+    //   isDragging: true
+    // });
+    staticData.lastX = pageX;
+    staticData.isDragging = true;
   };
 
   const onMouseMove = (event: MouseEvent) => {
@@ -54,12 +54,14 @@ const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
       pageX, staticData.lastX, stepSizeInPixels
     );
     const { distanceInSteps, direction, lastX } = movementData;
+    // staticData.lastX = lastX;
 
     if (distanceInSteps) {
-      setStaticData({
-        isDragging: true,
-        lastX: lastX
-      });
+      // setStaticData({
+      //   isDragging: true,
+      //   lastX: lastX
+      // });
+      staticData.lastX = lastX;
       onResize(movementData);
     }
   };

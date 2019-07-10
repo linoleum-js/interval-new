@@ -5,6 +5,7 @@ import css from './IntervalItem.module.css';
 import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
 import IntervalItemHandle from '../IntervalItemHandle/IntervalItemHandle';
 import { Direction } from '../../models/Direction';
+import { MovementData } from '../../models/MovementData';
 
 export enum ActivityType {
   Empty,
@@ -23,6 +24,7 @@ export interface IIntervalItemData {
 export interface IIntervalItemProps {
   data: IIntervalItemData;
   gridDimensions: IGridDimensions;
+  onChange: (data: IIntervalItemData) => void;
 }
 
 export const activityColor = {
@@ -34,8 +36,8 @@ export const activityColor = {
 
 const IntervalItem = (props: IIntervalItemProps) => {
   const { data, gridDimensions } = props;
-  const { start, end, type } = data;
-  const { stepSizeInPixels, stepSizeInMs } = gridDimensions;
+  const { start, end, type, id } = data;
+  const { stepSizeInPixels, stepSizeInMs, msInDay } = gridDimensions;
 
   const toPixels = (value: number): number => {
     return value / stepSizeInMs * stepSizeInPixels;
@@ -47,6 +49,52 @@ const IntervalItem = (props: IIntervalItemProps) => {
     backgroundColor: activityColor[type],
   };
 
+  const onResizeLeft = (movementData: MovementData) => {
+    const { onChange } = props;
+    const { distanceInSteps, direction } = movementData;
+    const distanceInMs = distanceInSteps * stepSizeInMs;
+    let newStart;
+    if (direction === Direction.Left) {
+      newStart = start - distanceInMs;
+      if (newStart < 0) {
+        newStart = 0;
+      }
+    } else {
+      newStart = start + distanceInMs;
+      if (newStart > end - stepSizeInMs) { 
+        newStart = end - stepSizeInMs;
+      }
+    }
+
+    onChange({
+      ...data,
+      start: newStart
+    });
+  };
+
+  const onResizeRight = (movementData: MovementData) => {
+    const { onChange } = props;
+    const { distanceInSteps, direction } = movementData;
+    const distanceInMs = distanceInSteps * stepSizeInMs;
+    let newEnd;
+    if (direction === Direction.Right) {
+      newEnd = end + distanceInMs;
+      if (newEnd > msInDay) {
+        newEnd = newEnd;
+      }
+    } else {
+      newEnd = end - distanceInMs;
+      if (newEnd < start + stepSizeInMs) { 
+        newEnd = start + stepSizeInMs;
+      }
+    }
+
+    onChange({
+      ...data,
+      end: newEnd
+    });
+  };
+
   return <div
     className={css.IntervalItem}
     style={style}
@@ -55,13 +103,13 @@ const IntervalItem = (props: IIntervalItemProps) => {
       direction={Direction.Left}
       gridDimensions={gridDimensions}
       value={start}
-      onResize={(data) => { console.log(data); }}
+      onResize={onResizeLeft}
     />
     <IntervalItemHandle
       direction={Direction.Right}
       gridDimensions={gridDimensions}
       value={end}
-      onResize={(data) => { console.log(data); }}
+      onResize={onResizeRight}
     />
   </div>;
 };

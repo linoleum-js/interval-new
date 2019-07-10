@@ -19,6 +19,7 @@ const IntervalList = (props: IIntervalListProps) => {
         key={item.id}
         data={item}
         gridDimensions={gridDimensions}
+        onChange={(data) => { console.log(data); }}
       />;
     })}
   </div>;
