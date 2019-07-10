@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
 import { msToHHMM, getMovementdata } from '../../util/util';
-import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
+import { IGridDimensions } from '../RangeGrid/RangeGrid';
 
-import css from './IntervalItemHandle.module.css';
+import css from './RangeItemHandle.module.css';
 import { Direction } from '../../models/Direction';
 import { MovementData } from '../../models/MovementData';
 
-export interface IIntervalItemHandleProps {
+export interface IRangeItemHandleProps {
   direction: Direction;
   gridDimensions: IGridDimensions;
   value: number;
   onResize: (data: MovementData) => void;
 }
 
-const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
+const RangeItemHandle = (props: IRangeItemHandleProps) => {
   const { direction, value } = props;
   const [a, setA] = useState(0);
   const [staticData, setStaticData] = useState({
@@ -24,8 +24,8 @@ const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
   
   const getDirectionClassName = (): string => {
     return direction === Direction.Left ?
-      css.IntervalItemHandleLeft :
-      css.IntervalItemHandleRight;
+      css.RangeItemHandleLeft :
+      css.RangeItemHandleRight;
   };
 
   const onPointerUp = () => {
@@ -76,10 +76,10 @@ const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
   });
 
   return <div
-    className={`${css.IntervalItemHandle} ${getDirectionClassName()}`}
+    className={`${css.RangeItemHandle} ${getDirectionClassName()}`}
   >
     <div
-      className={css.IntervalItemHandleBody}
+      className={css.RangeItemHandleBody}
       onPointerDown={onPointerDown}
     >
       {msToHHMM(value)}
@@ -88,4 +88,4 @@ const IntervalItemHandle = (props: IIntervalItemHandleProps) => {
   </div>
 };
 
-export default IntervalItemHandle;
+export default RangeItemHandle;

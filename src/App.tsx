@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import IntervalGrid from './components/IntervalGrid/IntervalGrid';
+import RangeGrid from './components/RangeGrid/RangeGrid';
 
 const list = [{
   start: 0 * 60 * 1000,
@@ -18,7 +18,7 @@ const list = [{
 const App: React.FC = () => {
   return (
     <div className="App">
-      <IntervalGrid
+      <RangeGrid
         list={list}
       />
     </div>

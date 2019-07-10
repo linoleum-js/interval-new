@@ -3,7 +3,7 @@
   --handle-color: #2f4050;
 }
 
-.IntervalItemHandle {
+.RangeItemHandle {
   position: absolute;
   width: 1px;
   height: 60px;
@@ -11,7 +11,7 @@
   bottom: 0;
 }
 
-.IntervalItemHandleBody {
+.RangeItemHandleBody {
   background-color: var(--handle-color);
   height: 15px;
   line-height: 15px;
@@ -23,20 +23,20 @@
   padding: 0 5px;
 }
 
-.IntervalItemHandleLeft {
+.RangeItemHandleLeft {
   left: 0;
 }
 
-.IntervalItemHandleRight {
+.RangeItemHandleRight {
   right: 0;
 }
 
-.IntervalItemHandleLeft .IntervalItemHandleBody {
+.RangeItemHandleLeft .RangeItemHandleBody {
   right: 0;
 }
 
-.IntervalItemHandleLeft .IntervalItemHandleBody:before,
-.IntervalItemHandleRight .IntervalItemHandleBody:after {
+.RangeItemHandleLeft .RangeItemHandleBody:before,
+.RangeItemHandleRight .RangeItemHandleBody:after {
   content: ' ';
   width: 0;
   height: 0;
@@ -44,13 +44,13 @@
   position: absolute;
 }
 
-.IntervalItemHandleLeft .IntervalItemHandleBody:before {
+.RangeItemHandleLeft .RangeItemHandleBody:before {
   border-width: 7.5px 5px 7.5px 0;
   border-color: transparent var(--handle-color) transparent transparent;
   left: -5px;
 }
 
-.IntervalItemHandleRight .IntervalItemHandleBody:after {
+.RangeItemHandleRight .RangeItemHandleBody:after {
   border-width: 7.5px 0 7.5px 5px;
   border-color: transparent transparent transparent var(--handle-color);
   right: -5px;

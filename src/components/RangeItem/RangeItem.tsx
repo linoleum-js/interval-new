@@ -1,30 +1,19 @@
 
 import React, { StyleHTMLAttributes, CSSProperties } from 'react';
 
-import css from './IntervalItem.module.css';
-import { IGridDimensions } from '../IntervalGrid/IntervalGrid';
-import IntervalItemHandle from '../IntervalItemHandle/IntervalItemHandle';
+import css from './RangeItem.module.css';
+import { IGridDimensions } from '../RangeGrid/RangeGrid';
+import RangeItemHandle from '../RangeItemHandle/RangeItemHandle';
 import { Direction } from '../../models/Direction';
 import { MovementData } from '../../models/MovementData';
+import { IRangeItemData } from '../../models/IRangeItemData';
+import { ActivityType } from '../../models/IActivityType';
 
-export enum ActivityType {
-  Empty,
-  Work,
-  Lunch,
-  Break
-}
 
-export interface IIntervalItemData {
-  start: number;
-  end: number;
-  type: ActivityType;
-  id: string;
-}
-
-export interface IIntervalItemProps {
-  data: IIntervalItemData;
+export interface IRangeItemProps {
+  data: IRangeItemData;
   gridDimensions: IGridDimensions;
-  onChange: (data: IIntervalItemData) => void;
+  onChange: (data: IRangeItemData) => void;
 }
 
 export const activityColor = {
@@ -34,7 +23,7 @@ export const activityColor = {
   [ActivityType.Break]: 'rgb(255, 189, 72)',
 };
 
-const IntervalItem = (props: IIntervalItemProps) => {
+const RangeItem = (props: IRangeItemProps) => {
   const { data, gridDimensions } = props;
   const { start, end, type, id } = data;
   const { stepSizeInPixels, stepSizeInMs, msInDay } = gridDimensions;
@@ -96,16 +85,16 @@ const IntervalItem = (props: IIntervalItemProps) => {
   };
 
   return <div
-    className={css.IntervalItem}
+    className={css.RangeItem}
     style={style}
   >
-    <IntervalItemHandle
+    <RangeItemHandle
       direction={Direction.Left}
       gridDimensions={gridDimensions}
       value={start}
       onResize={onResizeLeft}
     />
-    <IntervalItemHandle
+    <RangeItemHandle
       direction={Direction.Right}
       gridDimensions={gridDimensions}
       value={end}
@@ -114,4 +103,4 @@ const IntervalItem = (props: IIntervalItemProps) => {
   </div>;
 };
 
-export default IntervalItem;
+export default RangeItem;

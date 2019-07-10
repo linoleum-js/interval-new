@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { throttle } from 'lodash';
 
-import IntervalList, { IIntervalListProps } from '../IntervalList/IntervalList';
-import { IIntervalItemData } from '../IntervalItem/IntervalItem';
+import RangeList, { IRangeListProps } from '../RangeList/RangeList';
+import { IRangeItemData } from '../../models/IRangeItemData';
 
 const msInDay = 24 * 60 * 60 * 1000; // one day
 const stepSizeInMs = 5 * 60 * 1000; // 5 minutes
@@ -17,11 +17,10 @@ export interface IGridDimensions {
 }
 
 export interface IGridProps {
-  list: Array<IIntervalItemData>;
+  list: Array<IRangeItemData>;
 }
 
-const IntervalGrid = (props: IGridProps) => {
-  const { list } = props;
+const RangeGrid = (props: IGridProps) => {
   const wrapperElement = useRef<HTMLDivElement>(null);
 
   const getGridDimensions = () => {
@@ -63,11 +62,11 @@ const IntervalGrid = (props: IGridProps) => {
   return <div
     ref={wrapperElement}
   >
-    <IntervalList
+    <RangeList
       {...props}
       gridDimensions={gridDimensions}
     />
   </div>
 };
 
-export default IntervalGrid;
+export default RangeGrid;
