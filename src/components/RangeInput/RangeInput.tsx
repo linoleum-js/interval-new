@@ -21,8 +21,6 @@ const RangeInput = (props: IRangeInputProps) => {
   const { data } = props;
   const { list } = data;
 
-  const dispatch = useDispatch();
-
   // const { list, gridDimensions } = props;
 
   return <div className={css.RangeList}>
