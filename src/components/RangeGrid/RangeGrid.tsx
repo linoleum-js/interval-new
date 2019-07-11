@@ -1,12 +1,10 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { throttle } from 'lodash';
 
-import RangeList, { IRangeListProps } from '../RangeList/RangeList';
+import RangeInput, { IRangeInputProps } from '../RangeInput/RangeInput';
 import { IRangeItemData } from '../../models/IRangeItemData';
-
-const msInDay = 24 * 60 * 60 * 1000; // one day
-const stepSizeInMs = 5 * 60 * 1000; // 5 minutes
-const numberOfSteps = msInDay / stepSizeInMs;
+import { numberOfSteps, stepSizeInMs, msInDay } from '../../constants';
+import RangeInputCollection from '../RangeInputCollection/RangeInputCollection';
 
 export interface IGridDimensions {
   stepSizeInMs: number;
@@ -17,7 +15,6 @@ export interface IGridDimensions {
 }
 
 export interface IGridProps {
-  list: Array<IRangeItemData>;
 }
 
 const RangeGrid = (props: IGridProps) => {
@@ -62,9 +59,7 @@ const RangeGrid = (props: IGridProps) => {
   return <div
     ref={wrapperElement}
   >
-    <RangeList
-      {...props}
-      gridDimensions={gridDimensions}
+    <RangeInputCollection
     />
   </div>
 };

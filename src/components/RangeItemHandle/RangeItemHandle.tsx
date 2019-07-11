@@ -6,15 +6,20 @@ import { IGridDimensions } from '../RangeGrid/RangeGrid';
 import css from './RangeItemHandle.module.css';
 import { Direction } from '../../models/Direction';
 import { MovementData } from '../../models/MovementData';
+import { IUiStateState } from '../../redux/uiState/uiStateStore';
+import { useSelector } from 'react-redux';
+import { IAppState } from '../../redux/store';
 
 export interface IRangeItemHandleProps {
   direction: Direction;
-  gridDimensions: IGridDimensions;
   value: number;
   onResize: (data: MovementData) => void;
 }
 
 const RangeItemHandle = (props: IRangeItemHandleProps) => {
+  const uiState: IUiStateState = useSelector((state: IAppState) =>
+    state.uiState
+  );
   const { direction, value } = props;
   const [a, setA] = useState(0);
   const [staticData, setStaticData] = useState({
@@ -48,8 +53,8 @@ const RangeItemHandle = (props: IRangeItemHandleProps) => {
     }
 
     const { pageX } = event;
-    const { gridDimensions, onResize } = props;
-    const { stepSizeInPixels } = gridDimensions;
+    const { onResize } = props;
+    const { stepSizeInPixels } = uiState;
     const movementData: MovementData = getMovementdata(
       pageX, staticData.lastX, stepSizeInPixels
     );

@@ -8,11 +8,14 @@ import { Direction } from '../../models/Direction';
 import { MovementData } from '../../models/MovementData';
 import { IRangeItemData } from '../../models/IRangeItemData';
 import { ActivityType } from '../../models/IActivityType';
+import { IUiStateState } from '../../redux/uiState/uiStateStore';
+import { useSelector } from 'react-redux';
+import { IAppState } from '../../redux/store';
+import { stepSizeInMs, msInDay } from '../../constants';
 
 
 export interface IRangeItemProps {
   data: IRangeItemData;
-  gridDimensions: IGridDimensions;
   onChange: (data: IRangeItemData) => void;
 }
 
@@ -24,9 +27,12 @@ export const activityColor = {
 };
 
 const RangeItem = (props: IRangeItemProps) => {
-  const { data, gridDimensions } = props;
+  const uiState: IUiStateState = useSelector((state: IAppState) =>
+    state.uiState
+  );
+  const { data } = props;
   const { start, end, type, id } = data;
-  const { stepSizeInPixels, stepSizeInMs, msInDay } = gridDimensions;
+  const { stepSizeInPixels } = uiState;
 
   const toPixels = (value: number): number => {
     return value / stepSizeInMs * stepSizeInPixels;
@@ -90,13 +96,11 @@ const RangeItem = (props: IRangeItemProps) => {
   >
     <RangeItemHandle
       direction={Direction.Left}
-      gridDimensions={gridDimensions}
       value={start}
       onResize={onResizeLeft}
     />
     <RangeItemHandle
       direction={Direction.Right}
-      gridDimensions={gridDimensions}
       value={end}
       onResize={onResizeRight}
     />
