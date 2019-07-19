@@ -1,17 +1,17 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 
-import { rangeListsReducer, IRangeListState } from './rangeLists/RangeListsStore';
+import { scheduleListsReducer, IScheduleListState } from '@redux/scheduleLists/ScheduleListsStore';
 import { uiStateReducer, IUiStateState } from './uiState/uiStateStore';
 
 export interface IAppState {
-  rangeLists: IRangeListState;
+  scheduleLists: IScheduleListState;
   uiState: IUiStateState;
 }
 
 const store = createStore(
   combineReducers<IAppState>({
-    rangeLists: rangeListsReducer,
+    scheduleLists: scheduleListsReducer,
     uiState: uiStateReducer
   }),
   compose(

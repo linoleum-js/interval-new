@@ -1,6 +1,6 @@
 import { Reducer, Action } from 'redux';
 
-import { IRangeItemData } from '@models/IRangeItemData';
+import { IScheduleItemData } from '@models/IScheduleItemData';
 
 export interface IUiStateState {
   widthInPixels: number;

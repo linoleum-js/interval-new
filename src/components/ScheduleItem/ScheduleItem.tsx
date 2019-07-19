@@ -2,21 +2,21 @@
 import React, { StyleHTMLAttributes, CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
 
-import { IGridDimensions } from '../RangeGrid/RangeGrid';
-import RangeItemHandle from '../RangeItemHandle/RangeItemHandle';
+import { IGridDimensions } from '../ScheduleGrid/ScheduleGrid';
+import ScheduleItemHandle from '../ScheduleItemHandle/ScheduleItemHandle';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
-import { IRangeItemData } from '@models/IRangeItemData';
+import { IScheduleItemData } from '@models/IScheduleItemData';
 import { ActivityType } from '@models/IActivityType';
 import { IUiStateState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
 import { stepSizeInMs, msInDay } from '@constants/constants';
 
-import css from './RangeItem.module.css';
+import css from './ScheduleItem.module.css';
 
-export interface IRangeItemProps {
-  data: IRangeItemData;
-  onChange: (data: IRangeItemData) => void;
+export interface IScheduleItemProps {
+  data: IScheduleItemData;
+  onChange: (data: IScheduleItemData) => void;
 }
 
 export const activityColor = {
@@ -26,7 +26,7 @@ export const activityColor = {
   [ActivityType.Break]: 'rgb(255, 189, 72)',
 };
 
-const RangeItem = (props: IRangeItemProps) => {
+const ScheduleItem = (props: IScheduleItemProps) => {
   const uiState: IUiStateState = useSelector((state: IAppState) =>
     state.uiState
   );
@@ -91,15 +91,15 @@ const RangeItem = (props: IRangeItemProps) => {
   };
 
   return <div
-    className={css.RangeItem}
+    className={css.ScheduleItem}
     style={style}
   >
-    <RangeItemHandle
+    <ScheduleItemHandle
       direction={Direction.Left}
       value={start}
       onResize={onResizeLeft}
     />
-    <RangeItemHandle
+    <ScheduleItemHandle
       direction={Direction.Right}
       value={end}
       onResize={onResizeRight}
@@ -107,4 +107,4 @@ const RangeItem = (props: IRangeItemProps) => {
   </div>;
 };
 
-export default RangeItem;
+export default ScheduleItem;

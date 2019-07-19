@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { throttle } from 'lodash';
 
-import RangeInput, { IRangeInputProps } from '@components/RangeInput/RangeInput';
-import { IRangeItemData } from '@models/IRangeItemData';
+import ScheduleInput, { IScheduleInputProps } from '@components/ScheduleInput/ScheduleInput';
+import { IScheduleItemData } from '@models/IScheduleItemData';
 import { numberOfSteps, stepSizeInMs, msInDay } from '@constants/constants';
-import RangeInputCollection from '../RangeInputCollection/RangeInputCollection';
+import ScheduleInputCollection from '../ScheduleInputCollection/ScheduleInputCollection';
 
 export interface IGridDimensions {
   stepSizeInMs: number;
@@ -17,7 +17,7 @@ export interface IGridDimensions {
 export interface IGridProps {
 }
 
-const RangeGrid = (props: IGridProps) => {
+const ScheduleGrid = (props: IGridProps) => {
   const wrapperElement = useRef<HTMLDivElement>(null);
 
   const getGridDimensions = () => {
@@ -59,8 +59,8 @@ const RangeGrid = (props: IGridProps) => {
   return <div
     ref={wrapperElement}
   >
-    <RangeInputCollection />
+    <ScheduleInputCollection />
   </div>
 };
 
-export default RangeGrid;
+export default ScheduleGrid;

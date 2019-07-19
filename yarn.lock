@@ -1911,7 +1911,7 @@ autoprefixer@^9.4.9:
     browserslist "^4.6.1"
     caniuse-lite "^1.0.30000971"
     chalk "^2.4.2"
-    normalize-range "^0.1.2"
+    normalize-schedule "^0.1.2"
     num2fraction "^1.2.2"
     postcss "^7.0.16"
     postcss-value-parser "^3.3.1"
@@ -2200,7 +2200,7 @@ braces@^2.3.1, braces@^2.3.2:
     arr-flatten "^1.1.0"
     array-unique "^0.3.2"
     extend-shallow "^2.0.1"
-    fill-range "^4.0.0"
+    fill-schedule "^4.0.0"
     isobject "^3.0.1"
     repeat-element "^1.1.2"
     snapdragon "^0.8.1"
@@ -3891,7 +3891,7 @@ express@^4.16.2:
     path-to-regexp "0.1.7"
     proxy-addr "~2.0.5"
     qs "6.7.0"
-    range-parser "~1.2.1"
+    schedule-parser "~1.2.1"
     safe-buffer "5.1.2"
     send "0.17.1"
     serve-static "1.14.1"
@@ -4034,15 +4034,15 @@ filesize@3.6.1:
   resolved "https://registry.yarnpkg.com/filesize/-/filesize-3.6.1.tgz#090bb3ee01b6f801a8a8be99d31710b3422bb317"
   integrity sha512-7KjR1vv6qnicaPMi1iiTcI85CyYwRO/PSFCu6SvqL8jN2Wjt/NIYQTFtFs7fSDCYOstUkEWIQGFUg5YZQfjlcg==
 
-fill-range@^4.0.0:
+fill-schedule@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-4.0.0.tgz#d544811d428f98eb06a63dc402d2403c328c38f7"
+  resolved "https://registry.yarnpkg.com/fill-schedule/-/fill-schedule-4.0.0.tgz#d544811d428f98eb06a63dc402d2403c328c38f7"
   integrity sha1-1USBHUKPmOsGpj3EAtJAPDKMOPc=
   dependencies:
     extend-shallow "^2.0.1"
     is-number "^3.0.0"
     repeat-string "^1.6.1"
-    to-regex-range "^2.1.0"
+    to-regex-schedule "^2.1.0"
 
 finalhandler@~1.1.2:
   version "1.1.2"
@@ -6515,9 +6515,9 @@ normalize-path@^3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-normalize-range@^0.1.2:
+normalize-schedule@^0.1.2:
   version "0.1.2"
-  resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
+  resolved "https://registry.yarnpkg.com/normalize-schedule/-/normalize-schedule-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
   integrity sha1-LRDAa9/TEuqXd2laTShDlFa3WUI=
 
 normalize-url@^3.0.0:
@@ -7932,9 +7932,9 @@ randomfill@^1.0.3:
     randombytes "^2.0.5"
     safe-buffer "^5.1.0"
 
-range-parser@^1.2.1, range-parser@~1.2.1:
+schedule-parser@^1.2.1, schedule-parser@~1.2.1:
   version "1.2.1"
-  resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
+  resolved "https://registry.yarnpkg.com/schedule-parser/-/schedule-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
 raw-body@2.4.0:
@@ -8543,7 +8543,7 @@ send@0.17.1:
     mime "1.6.0"
     ms "2.1.1"
     on-finished "~2.3.0"
-    range-parser "~1.2.1"
+    schedule-parser "~1.2.1"
     statuses "~1.5.0"
 
 serialize-javascript@^1.4.0, serialize-javascript@^1.7.0:
@@ -9253,9 +9253,9 @@ to-object-path@^0.3.0:
   dependencies:
     kind-of "^3.0.2"
 
-to-regex-range@^2.1.0:
+to-regex-schedule@^2.1.0:
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/to-regex-range/-/to-regex-range-2.1.1.tgz#7c80c17b9dfebe599e27367e0d4dd5590141db38"
+  resolved "https://registry.yarnpkg.com/to-regex-schedule/-/to-regex-schedule-2.1.1.tgz#7c80c17b9dfebe599e27367e0d4dd5590141db38"
   integrity sha1-fIDBe53+vlmeJzZ+DU3VWQFB2zg=
   dependencies:
     is-number "^3.0.0"
@@ -9708,7 +9708,7 @@ webpack-dev-middleware@^3.5.1:
   dependencies:
     memory-fs "^0.4.1"
     mime "^2.4.2"
-    range-parser "^1.2.1"
+    schedule-parser "^1.2.1"
     webpack-log "^2.0.0"
 
 webpack-dev-server@3.2.1:
@@ -9916,7 +9916,7 @@ workbox-build@^4.2.0:
     workbox-google-analytics "^4.3.1"
     workbox-navigation-preload "^4.3.1"
     workbox-precaching "^4.3.1"
-    workbox-range-requests "^4.3.1"
+    workbox-schedule-requests "^4.3.1"
     workbox-routing "^4.3.1"
     workbox-strategies "^4.3.1"
     workbox-streams "^4.3.1"
@@ -9966,9 +9966,9 @@ workbox-precaching@^4.3.1:
   dependencies:
     workbox-core "^4.3.1"
 
-workbox-range-requests@^4.3.1:
+workbox-schedule-requests@^4.3.1:
   version "4.3.1"
-  resolved "https://registry.yarnpkg.com/workbox-range-requests/-/workbox-range-requests-4.3.1.tgz#f8a470188922145cbf0c09a9a2d5e35645244e74"
+  resolved "https://registry.yarnpkg.com/workbox-schedule-requests/-/workbox-schedule-requests-4.3.1.tgz#f8a470188922145cbf0c09a9a2d5e35645244e74"
   integrity sha512-S+HhL9+iTFypJZ/yQSl/x2Bf5pWnbXdd3j57xnb0V60FW1LVn9LRZkPtneODklzYuFZv7qK6riZ5BNyc0R0jZA==
   dependencies:
     workbox-core "^4.3.1"

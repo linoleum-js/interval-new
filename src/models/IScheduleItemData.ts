@@ -1,6 +1,6 @@
 import { ActivityType } from "./IActivityType";
 
-export interface IRangeItemData {
+export interface IScheduleItemData {
   start: number;
   end: number;
   type: ActivityType;

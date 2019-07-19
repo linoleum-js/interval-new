@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 
-import RangeGrid from '@components/RangeGrid/RangeGrid';
+import ScheduleGrid from '@components/ScheduleGrid/ScheduleGrid';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <RangeGrid
+      <ScheduleGrid
       />
     </div>
   );

@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import RangeItem from '../RangeItem/RangeItem';
-import { IRangeItemData } from '@models/IRangeItemData';
+import ScheduleItem from '../ScheduleItem/ScheduleItem';
+import { IScheduleItemData } from '@models/IScheduleItemData';
 import { IAppState } from '@redux/store';
 import { IUiStateState } from '@redux/uiState/uiStateStore';
-import { IRangeData } from '@models/IRangeData';
+import { IScheduleData } from '@models/IScheduleData';
 
-import css from './RangeInput.module.css';
+import css from './ScheduleInput.module.css';
 
-export interface IRangeInputProps {
-  data: IRangeData;
+export interface IScheduleInputProps {
+  data: IScheduleData;
 }
 
-const RangeInput = (props: IRangeInputProps) => {
+const ScheduleInput = (props: IScheduleInputProps) => {
   const uiState: IUiStateState = useSelector((state: IAppState) =>
     state.uiState
   );
@@ -22,9 +22,9 @@ const RangeInput = (props: IRangeInputProps) => {
 
   // const { list, gridDimensions } = props;
 
-  return <div className={css.RangeList}>
-    {list.map((item: IRangeItemData) => {
-      return <RangeItem
+  return <div className={css.ScheduleList}>
+    {list.map((item: IScheduleItemData) => {
+      return <ScheduleItem
         key={item.id}
         data={item}
         onChange={(data) => { console.log(data); }}
@@ -33,4 +33,4 @@ const RangeInput = (props: IRangeInputProps) => {
   </div>;
 };
 
-export default RangeInput;
+export default ScheduleInput;

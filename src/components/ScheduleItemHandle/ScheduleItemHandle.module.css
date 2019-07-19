@@ -3,7 +3,7 @@
   --handle-color: #2f4050;
 }
 
-.RangeItemHandle {
+.ScheduleItemHandle {
   position: absolute;
   width: 1px;
   height: 60px;
@@ -11,7 +11,7 @@
   bottom: 0;
 }
 
-.RangeItemHandleBody {
+.ScheduleItemHandleBody {
   background-color: var(--handle-color);
   height: 15px;
   line-height: 15px;
@@ -23,20 +23,20 @@
   padding: 0 5px;
 }
 
-.RangeItemHandleLeft {
+.ScheduleItemHandleLeft {
   left: 0;
 }
 
-.RangeItemHandleRight {
+.ScheduleItemHandleRight {
   right: 0;
 }
 
-.RangeItemHandleLeft .RangeItemHandleBody {
+.ScheduleItemHandleLeft .ScheduleItemHandleBody {
   right: 0;
 }
 
-.RangeItemHandleLeft .RangeItemHandleBody:before,
-.RangeItemHandleRight .RangeItemHandleBody:after {
+.ScheduleItemHandleLeft .ScheduleItemHandleBody:before,
+.ScheduleItemHandleRight .ScheduleItemHandleBody:after {
   content: ' ';
   width: 0;
   height: 0;
@@ -44,13 +44,13 @@
   position: absolute;
 }
 
-.RangeItemHandleLeft .RangeItemHandleBody:before {
+.ScheduleItemHandleLeft .ScheduleItemHandleBody:before {
   border-width: 7.5px 5px 7.5px 0;
   border-color: transparent var(--handle-color) transparent transparent;
   left: -5px;
 }
 
-.RangeItemHandleRight .RangeItemHandleBody:after {
+.ScheduleItemHandleRight .ScheduleItemHandleBody:after {
   border-width: 7.5px 0 7.5px 5px;
   border-color: transparent transparent transparent var(--handle-color);
   right: -5px;

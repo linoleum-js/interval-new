@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { msToHHMM, getMovementdata } from '@util/util';
-import { IGridDimensions } from '../RangeGrid/RangeGrid';
+import { IGridDimensions } from '../ScheduleGrid/ScheduleGrid';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
 import { IUiStateState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
 
-import css from './RangeItemHandle.module.css';
+import css from './ScheduleItemHandle.module.css';
 
-export interface IRangeItemHandleProps {
+export interface IScheduleItemHandleProps {
   direction: Direction;
   value: number;
   onResize: (data: MovementData) => void;
 }
 
-const RangeItemHandle = (props: IRangeItemHandleProps) => {
+const ScheduleItemHandle = (props: IScheduleItemHandleProps) => {
   const uiState: IUiStateState = useSelector((state: IAppState) =>
     state.uiState
   );
@@ -29,8 +29,8 @@ const RangeItemHandle = (props: IRangeItemHandleProps) => {
   
   const getDirectionClassName = (): string => {
     return direction === Direction.Left ?
-      css.RangeItemHandleLeft :
-      css.RangeItemHandleRight;
+      css.ScheduleItemHandleLeft :
+      css.ScheduleItemHandleRight;
   };
 
   const onPointerUp = () => {
@@ -81,10 +81,10 @@ const RangeItemHandle = (props: IRangeItemHandleProps) => {
   });
 
   return <div
-    className={`${css.RangeItemHandle} ${getDirectionClassName()}`}
+    className={`${css.ScheduleItemHandle} ${getDirectionClassName()}`}
   >
     <div
-      className={css.RangeItemHandleBody}
+      className={css.ScheduleItemHandleBody}
       onPointerDown={onPointerDown}
     >
       {msToHHMM(value)}
@@ -93,4 +93,4 @@ const RangeItemHandle = (props: IRangeItemHandleProps) => {
   </div>
 };
 
-export default RangeItemHandle;
+export default ScheduleItemHandle;
