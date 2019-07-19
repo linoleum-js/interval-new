@@ -3,17 +3,22 @@ import { Reducer, Action } from 'redux';
 import { IRangeItemData } from '@models/IRangeItemData';
 import { IRangeData } from '@models/IRangeData';
 
-const data = [{
-  start: 0 * 60 * 1000,
-  end: 60 * 60 * 1000,
-  type: 1,
-  id: '1'
-}, {
-  start: 250 * 60 * 1000,
-  end: 380 * 60 * 1000,
-  type: 2,
-  id: '2'
-}];
+const singleItem: IRangeData = {
+  id: '123123',
+  list: [{
+    start: 0 * 60 * 1000,
+    end: 60 * 60 * 1000,
+    type: 1,
+    id: '1'
+  }, {
+    start: 250 * 60 * 1000,
+    end: 380 * 60 * 1000,
+    type: 2,
+    id: '2'
+  }]
+};
+
+const data: Array<IRangeData> = [singleItem];
 
 export interface IRangeListState {
   isLoading: boolean;

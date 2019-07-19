@@ -59,8 +59,7 @@ const RangeGrid = (props: IGridProps) => {
   return <div
     ref={wrapperElement}
   >
-    <RangeInputCollection
-    />
+    <RangeInputCollection />
   </div>
 };
 

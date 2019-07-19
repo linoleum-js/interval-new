@@ -18,8 +18,8 @@ const RangeInputCollection = (props: IRangeInputCollectionProps) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    
-  });
+    dispatch(fetchList());
+  }, []);
 
   console.log('listState', listState);
 
