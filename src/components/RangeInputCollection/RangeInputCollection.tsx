@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { IRangeData } from '../../models/IRangeData';
-import { IRangeListState } from '../../redux/rangeLists/RangeListsStore';
 import { useSelector, useDispatch } from 'react-redux';
-import { IAppState } from '../../redux/store';
+
+import { IRangeData } from '@models/IRangeData';
+import { IRangeListState } from '@redux/rangeLists/RangeListsStore';
+import { fetchList } from '@redux/rangeLists/RangeListsStore';
+import { IAppState } from '@redux/store';
 import RangeInput from '../RangeInput/RangeInput';
 
 export interface IRangeInputCollectionProps {
@@ -18,6 +20,8 @@ const RangeInputCollection = (props: IRangeInputCollectionProps) => {
   useEffect(() => {
     
   });
+
+  console.log('listState', listState);
 
   return <div>
     {list.map((item: IRangeData) => {

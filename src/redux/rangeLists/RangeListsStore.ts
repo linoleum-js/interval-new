@@ -1,7 +1,7 @@
-
-import { IRangeItemData } from '../../models/IRangeItemData';
 import { Reducer, Action } from 'redux';
-import { IRangeData } from '../../models/IRangeData';
+
+import { IRangeItemData } from '@models/IRangeItemData';
+import { IRangeData } from '@models/IRangeData';
 
 const data = [{
   start: 0 * 60 * 1000,

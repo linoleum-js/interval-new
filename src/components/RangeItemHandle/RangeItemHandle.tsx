@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { msToHHMM, getMovementdata } from '../../util/util';
+import { msToHHMM, getMovementdata } from '@util/util';
 import { IGridDimensions } from '../RangeGrid/RangeGrid';
+import { Direction } from '@models/Direction';
+import { MovementData } from '@models/MovementData';
+import { IUiStateState } from '@redux/uiState/uiStateStore';
+import { IAppState } from '@redux/store';
 
 import css from './RangeItemHandle.module.css';
-import { Direction } from '../../models/Direction';
-import { MovementData } from '../../models/MovementData';
-import { IUiStateState } from '../../redux/uiState/uiStateStore';
-import { useSelector } from 'react-redux';
-import { IAppState } from '../../redux/store';
 
 export interface IRangeItemHandleProps {
   direction: Direction;

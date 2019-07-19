@@ -1,6 +1,6 @@
-
-import { IRangeItemData } from '../../models/IRangeItemData';
 import { Reducer, Action } from 'redux';
+
+import { IRangeItemData } from '@models/IRangeItemData';
 
 export interface IUiStateState {
   widthInPixels: number;

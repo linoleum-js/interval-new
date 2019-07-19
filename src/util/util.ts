@@ -1,5 +1,5 @@
-import { MovementData } from "../models/MovementData";
-import { Direction } from "../models/Direction";
+import { MovementData } from "@models/MovementData";
+import { Direction } from "@models/Direction";
 
 
 export const pad2 = (value: string) => {

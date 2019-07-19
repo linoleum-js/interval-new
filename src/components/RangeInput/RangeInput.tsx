@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import RangeItem from '../RangeItem/RangeItem';
-
-import { IRangeItemData } from '../../models/IRangeItemData';
-import { useSelector, useDispatch } from 'react-redux';
-import { IAppState } from '../../redux/store';
-import { IUiStateState } from '../../redux/uiState/uiStateStore';
-import { IRangeData } from '../../models/IRangeData';
+import { IRangeItemData } from '@models/IRangeItemData';
+import { IAppState } from '@redux/store';
+import { IUiStateState } from '@redux/uiState/uiStateStore';
+import { IRangeData } from '@models/IRangeData';
 
 import css from './RangeInput.module.css';
 

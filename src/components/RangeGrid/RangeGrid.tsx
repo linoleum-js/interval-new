@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import { throttle } from 'lodash';
 
-import RangeInput, { IRangeInputProps } from '../RangeInput/RangeInput';
-import { IRangeItemData } from '../../models/IRangeItemData';
-import { numberOfSteps, stepSizeInMs, msInDay } from '../../constants';
+import RangeInput, { IRangeInputProps } from '@components/RangeInput/RangeInput';
+import { IRangeItemData } from '@models/IRangeItemData';
+import { numberOfSteps, stepSizeInMs, msInDay } from '@constants/constants';
 import RangeInputCollection from '../RangeInputCollection/RangeInputCollection';
 
 export interface IGridDimensions {

@@ -1,18 +1,18 @@
 
 import React, { StyleHTMLAttributes, CSSProperties } from 'react';
+import { useSelector } from 'react-redux';
 
-import css from './RangeItem.module.css';
 import { IGridDimensions } from '../RangeGrid/RangeGrid';
 import RangeItemHandle from '../RangeItemHandle/RangeItemHandle';
-import { Direction } from '../../models/Direction';
-import { MovementData } from '../../models/MovementData';
-import { IRangeItemData } from '../../models/IRangeItemData';
-import { ActivityType } from '../../models/IActivityType';
-import { IUiStateState } from '../../redux/uiState/uiStateStore';
-import { useSelector } from 'react-redux';
-import { IAppState } from '../../redux/store';
-import { stepSizeInMs, msInDay } from '../../constants';
+import { Direction } from '@models/Direction';
+import { MovementData } from '@models/MovementData';
+import { IRangeItemData } from '@models/IRangeItemData';
+import { ActivityType } from '@models/IActivityType';
+import { IUiStateState } from '@redux/uiState/uiStateStore';
+import { IAppState } from '@redux/store';
+import { stepSizeInMs, msInDay } from '@constants/constants';
 
+import css from './RangeItem.module.css';
 
 export interface IRangeItemProps {
   data: IRangeItemData;
