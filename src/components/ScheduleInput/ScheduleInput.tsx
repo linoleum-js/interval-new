@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import ScheduleItem from '../ScheduleItem/ScheduleItem';
-import { IScheduleItemData } from '@models/IScheduleItemData';
+import ScheduleInterval from '../ScheduleInterval/ScheduleInterval';
+import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
 import { IAppState } from '@redux/store';
-import { IUiStateState } from '@redux/uiState/uiStateStore';
+import { IUiState } from '@redux/uiState/uiStateStore';
 import { IScheduleData } from '@models/IScheduleData';
 
 import css from './ScheduleInput.module.css';
@@ -14,7 +14,7 @@ export interface IScheduleInputProps {
 }
 
 const ScheduleInput = (props: IScheduleInputProps) => {
-  const uiState: IUiStateState = useSelector((state: IAppState) =>
+  const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
   const { data } = props;
@@ -23,8 +23,8 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   // const { list, gridDimensions } = props;
 
   return <div className={css.ScheduleList}>
-    {list.map((item: IScheduleItemData) => {
-      return <ScheduleItem
+    {list.map((item: IScheduleIntervalData) => {
+      return <ScheduleInterval
         key={item.id}
         data={item}
         onChange={(data) => { console.log(data); }}

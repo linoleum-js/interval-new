@@ -1,49 +1,41 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { throttle } from 'lodash';
 
 import ScheduleInput, { IScheduleInputProps } from '@components/ScheduleInput/ScheduleInput';
-import { IScheduleItemData } from '@models/IScheduleItemData';
+import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
 import { numberOfSteps, stepSizeInMs, msInDay } from '@constants/constants';
 import ScheduleInputCollection from '../ScheduleInputCollection/ScheduleInputCollection';
-
-export interface IGridDimensions {
-  stepSizeInMs: number;
-  numberOfSteps: number;
-  widthInPixels: number;
-  stepSizeInPixels: number;
-  msInDay: number;
-}
+import { updateUiState, IUiState } from '@redux/uiState/uiStateStore';
+import { IScheduleListState } from '@redux/scheduleLists/ScheduleListsStore';
+import { IAppState } from '@redux/store';
 
 export interface IGridProps {
 }
 
 const ScheduleGrid = (props: IGridProps) => {
   const wrapperElement = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  const uiState: IUiState = useSelector((state: IAppState) =>
+    state.uiState
+  );
 
-  const getGridDimensions = () => {
-    let widthInPixels = 0;
+  const getGridDimensions = (): IUiState => {
+    let widthInPixels = uiState.widthInPixels;
     if (wrapperElement.current) {
       widthInPixels = wrapperElement.current.clientWidth;
     }
     const stepSizeInPixels = widthInPixels / numberOfSteps;
     return {
-      stepSizeInMs,
-      numberOfSteps,
       widthInPixels,
-      stepSizeInPixels,
-      msInDay
+      stepSizeInPixels
     };
   };
 
-  const [
-    gridDimensions,
-    setGridDimensions
-  ] = useState<IGridDimensions>(getGridDimensions());
-
   const recalcGridDimensions = throttle(() => {
     const newGridData = getGridDimensions();
-    if (gridDimensions.widthInPixels !== newGridData.widthInPixels) {
-      setGridDimensions(newGridData);
+    if (uiState.widthInPixels !== newGridData.widthInPixels) {
+      dispatch(updateUiState(newGridData));
     }
   }, 150);
 

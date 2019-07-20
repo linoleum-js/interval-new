@@ -1,8 +1,8 @@
 import { Reducer, Action } from 'redux';
 
-import { IScheduleItemData } from '@models/IScheduleItemData';
+import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
 
-export interface IUiStateState {
+export interface IUiState {
   widthInPixels: number;
   stepSizeInPixels: number;
 }
@@ -13,25 +13,25 @@ export enum UiStateActionTypes {
 
 export interface UpdateUiStateAction {
   type: UiStateActionTypes.UpdateUiState;
-  payload: IUiStateState;
+  payload: IUiState;
 }
 
-export const updateUiState = (payload: IUiStateState) => (dispatch: Function) => {
+export const updateUiState = (payload: IUiState) => (dispatch: Function) => {
   dispatch({
     type: UiStateActionTypes.UpdateUiState,
     payload
   });
 }
 
-const initialState: IUiStateState = {
-  widthInPixels: 0,
-  stepSizeInPixels: 0
+const initialState: IUiState = {
+  widthInPixels: 1,
+  stepSizeInPixels: 1
 };
 
-export const uiStateReducer: Reducer<IUiStateState> = (
-  state: IUiStateState = initialState,
+export const uiStateReducer: Reducer<IUiState> = (
+  state: IUiState = initialState,
   action: Action
-): IUiStateState => {
+): IUiState => {
   const { type, payload } = action as UpdateUiStateAction;
 
   switch (type) {

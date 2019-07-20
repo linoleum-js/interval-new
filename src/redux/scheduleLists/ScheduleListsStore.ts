@@ -1,6 +1,6 @@
 import { Reducer, Action } from 'redux';
 
-import { IScheduleItemData } from '@models/IScheduleItemData';
+import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
 
 const singleItem: IScheduleData = {
@@ -28,7 +28,7 @@ export interface IScheduleListState {
 export enum ScheduleActionTypes {
   RequestScheduleList = 'REQUEST_SCHEDULE_LIST',
   ReceiveScheduleList = 'RECEIVE_SCHEDULE_LIST',
-  UpdateScheduleList = 'FETCH_SCHEDULE_LIST'
+  UpdateScheduleList = 'UPDATE_SCHEDULE_LIST'
 }
 
 export interface ScheduleActionPayload {

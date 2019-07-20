@@ -1,6 +1,6 @@
-import { IScheduleItemData } from "./IScheduleItemData";
+import { IScheduleIntervalData } from "./IScheduleIntervalData";
 
 export interface IScheduleData {
   id: string;
-  list: Array<IScheduleItemData>;
+  list: Array<IScheduleIntervalData>;
 }

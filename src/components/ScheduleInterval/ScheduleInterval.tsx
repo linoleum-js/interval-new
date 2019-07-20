@@ -1,33 +1,27 @@
 
-import React, { StyleHTMLAttributes, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
 
-import { IGridDimensions } from '../ScheduleGrid/ScheduleGrid';
-import ScheduleItemHandle from '../ScheduleItemHandle/ScheduleItemHandle';
+import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
-import { IScheduleItemData } from '@models/IScheduleItemData';
-import { ActivityType } from '@models/IActivityType';
-import { IUiStateState } from '@redux/uiState/uiStateStore';
+import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
+import { IUiState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
 import { stepSizeInMs, msInDay } from '@constants/constants';
+import { activityColor } from '@constants/schedule';
 
-import css from './ScheduleItem.module.css';
+import css from './ScheduleInterval.module.css';
 
-export interface IScheduleItemProps {
-  data: IScheduleItemData;
-  onChange: (data: IScheduleItemData) => void;
+export interface IScheduleIntervalProps {
+  data: IScheduleIntervalData;
+  onChange: (data: IScheduleIntervalData) => void;
 }
 
-export const activityColor = {
-  [ActivityType.Empty]: 'transparent',
-  [ActivityType.Work]: 'rgb(72, 189, 84)',
-  [ActivityType.Lunch]: 'rgb(255, 189, 72)',
-  [ActivityType.Break]: 'rgb(255, 189, 72)',
-};
 
-const ScheduleItem = (props: IScheduleItemProps) => {
-  const uiState: IUiStateState = useSelector((state: IAppState) =>
+// TODO rename ScheduleInterval
+const ScheduleInterval = (props: IScheduleIntervalProps) => {
+  const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
   const { data } = props;
@@ -90,16 +84,18 @@ const ScheduleItem = (props: IScheduleItemProps) => {
     });
   };
 
+  console.log('uiState', uiState);
+
   return <div
-    className={css.ScheduleItem}
+    className={css.ScheduleInterval}
     style={style}
   >
-    <ScheduleItemHandle
+    <ScheduleIntervalHandle
       direction={Direction.Left}
       value={start}
       onResize={onResizeLeft}
     />
-    <ScheduleItemHandle
+    <ScheduleIntervalHandle
       direction={Direction.Right}
       value={end}
       onResize={onResizeRight}
@@ -107,4 +103,4 @@ const ScheduleItem = (props: IScheduleItemProps) => {
   </div>;
 };
 
-export default ScheduleItem;
+export default ScheduleInterval;

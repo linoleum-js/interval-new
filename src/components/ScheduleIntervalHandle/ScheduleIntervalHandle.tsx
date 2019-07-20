@@ -2,22 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { msToHHMM, getMovementdata } from '@util/util';
-import { IGridDimensions } from '../ScheduleGrid/ScheduleGrid';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
-import { IUiStateState } from '@redux/uiState/uiStateStore';
+import { IUiState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
 
-import css from './ScheduleItemHandle.module.css';
+import css from './ScheduleIntervalHandle.module.css';
 
-export interface IScheduleItemHandleProps {
+export interface IScheduleIntervalHandleProps {
   direction: Direction;
   value: number;
   onResize: (data: MovementData) => void;
 }
 
-const ScheduleItemHandle = (props: IScheduleItemHandleProps) => {
-  const uiState: IUiStateState = useSelector((state: IAppState) =>
+const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
+  const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
   const { direction, value } = props;
@@ -29,8 +28,8 @@ const ScheduleItemHandle = (props: IScheduleItemHandleProps) => {
   
   const getDirectionClassName = (): string => {
     return direction === Direction.Left ?
-      css.ScheduleItemHandleLeft :
-      css.ScheduleItemHandleRight;
+      css.ScheduleIntervalHandleLeft :
+      css.ScheduleIntervalHandleRight;
   };
 
   const onPointerUp = () => {
@@ -81,10 +80,10 @@ const ScheduleItemHandle = (props: IScheduleItemHandleProps) => {
   });
 
   return <div
-    className={`${css.ScheduleItemHandle} ${getDirectionClassName()}`}
+    className={`${css.ScheduleIntervalHandle} ${getDirectionClassName()}`}
   >
     <div
-      className={css.ScheduleItemHandleBody}
+      className={css.ScheduleIntervalHandleBody}
       onPointerDown={onPointerDown}
     >
       {msToHHMM(value)}
@@ -93,4 +92,4 @@ const ScheduleItemHandle = (props: IScheduleItemHandleProps) => {
   </div>
 };
 
-export default ScheduleItemHandle;
+export default ScheduleIntervalHandle;
