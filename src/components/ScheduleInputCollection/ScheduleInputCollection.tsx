@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { IScheduleData } from '@models/IScheduleData';
 import { IScheduleListState } from '@redux/scheduleLists/ScheduleListsStore';
-import { fetchList } from '@redux/scheduleLists/ScheduleListsStore';
+import { fetchScheduleList } from '@redux/scheduleLists/ScheduleListsStore';
 import { IAppState } from '@redux/store';
 import ScheduleInput from '../ScheduleInput/ScheduleInput';
 
@@ -18,7 +18,7 @@ const ScheduleInputCollection = (props: IScheduleInputCollectionProps) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchList());
+    dispatch(fetchScheduleList());
   }, []);
 
   console.log('listState', listState);

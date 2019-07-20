@@ -1,9 +1,10 @@
 import { Reducer, Action } from 'redux';
+import { findIndex } from 'lodash';
 
 import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
 
-const singleItem: IScheduleData = {
+const schedule: IScheduleData = {
   id: '123123',
   list: [{
     start: 0 * 60 * 1000,
@@ -18,7 +19,7 @@ const singleItem: IScheduleData = {
   }]
 };
 
-const data: Array<IScheduleData> = [singleItem];
+const data: Array<IScheduleData> = [schedule];
 
 export interface IScheduleListState {
   isLoading: boolean;
@@ -33,7 +34,7 @@ export enum ScheduleActionTypes {
 
 export interface ScheduleActionPayload {
   list?: Array<IScheduleData>;
-  item?: IScheduleData;
+  schedule?: IScheduleData;
 }
 
 export interface RequestScheduleListAction {
@@ -47,7 +48,7 @@ export interface ReceiveScheduleListAction {
 }
 
 export interface UpdateScheduleAction {
-  type: ScheduleActionTypes.ReceiveScheduleList;
+  type: ScheduleActionTypes.UpdateScheduleList;
   payload: ScheduleActionPayload;
 }
 
@@ -60,12 +61,12 @@ export const updateSchedule = (data: IScheduleData) => (dispatch: Function) => {
   dispatch({
     type: ScheduleActionTypes.UpdateScheduleList,
     payload: {
-      item: data
+      schedule: data
     }
   });
 };
 
-export const fetchList = () => async (dispatch: Function) => {
+export const fetchScheduleList = () => async (dispatch: Function) => {
   dispatch({
     type: ScheduleActionTypes.ReceiveScheduleList,
     payload: {
@@ -95,6 +96,17 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
       return {
         isLoading: false,
         list: payload.list!
+      };
+    case ScheduleActionTypes.UpdateScheduleList:
+      const { list } = state;
+      const schedule: IScheduleData = payload.schedule!;
+      const index: number = findIndex(list, { id: schedule.id });
+      const nextItems: Array<IScheduleData> = list.slice(0, index);
+      const prevItems: Array<IScheduleData> = list.slice(index + 1);
+
+      return {
+        isLoading: false,
+        list: [...prevItems, schedule, ...nextItems]
       };
   }
 

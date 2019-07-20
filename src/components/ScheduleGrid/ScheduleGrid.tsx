@@ -1,13 +1,10 @@
-import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { throttle } from 'lodash';
 
-import ScheduleInput, { IScheduleInputProps } from '@components/ScheduleInput/ScheduleInput';
-import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
-import { numberOfSteps, stepSizeInMs, msInDay } from '@constants/constants';
+import { numberOfSteps } from '@constants/constants';
 import ScheduleInputCollection from '../ScheduleInputCollection/ScheduleInputCollection';
 import { updateUiState, IUiState } from '@redux/uiState/uiStateStore';
-import { IScheduleListState } from '@redux/scheduleLists/ScheduleListsStore';
 import { IAppState } from '@redux/store';
 
 export interface IGridProps {
@@ -21,7 +18,7 @@ const ScheduleGrid = (props: IGridProps) => {
   );
 
   const getGridDimensions = (): IUiState => {
-    let widthInPixels = uiState.widthInPixels;
+    let widthInPixels: number = uiState.widthInPixels;
     if (wrapperElement.current) {
       widthInPixels = wrapperElement.current.clientWidth;
     }
@@ -33,7 +30,7 @@ const ScheduleGrid = (props: IGridProps) => {
   };
 
   const recalcGridDimensions = throttle(() => {
-    const newGridData = getGridDimensions();
+    const newGridData: IUiState = getGridDimensions();
     if (uiState.widthInPixels !== newGridData.widthInPixels) {
       dispatch(updateUiState(newGridData));
     }

@@ -18,13 +18,11 @@ export interface IScheduleIntervalProps {
   onChange: (data: IScheduleIntervalData) => void;
 }
 
-
-// TODO rename ScheduleInterval
 const ScheduleInterval = (props: IScheduleIntervalProps) => {
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
-  const { data } = props;
+  const { data, onChange } = props;
   const { start, end, type, id } = data;
   const { stepSizeInPixels } = uiState;
 
@@ -39,10 +37,9 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   };
 
   const onResizeLeft = (movementData: MovementData) => {
-    const { onChange } = props;
     const { distanceInSteps, direction } = movementData;
-    const distanceInMs = distanceInSteps * stepSizeInMs;
-    let newStart;
+    const distanceInMs: number = distanceInSteps * stepSizeInMs;
+    let newStart: number;
     if (direction === Direction.Left) {
       newStart = start - distanceInMs;
       if (newStart < 0) {
@@ -55,17 +52,13 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
       }
     }
 
-    onChange({
-      ...data,
-      start: newStart
-    });
+    onChange({ ...data, start: newStart });
   };
 
   const onResizeRight = (movementData: MovementData) => {
-    const { onChange } = props;
     const { distanceInSteps, direction } = movementData;
-    const distanceInMs = distanceInSteps * stepSizeInMs;
-    let newEnd;
+    const distanceInMs: number = distanceInSteps * stepSizeInMs;
+    let newEnd: number;
     if (direction === Direction.Right) {
       newEnd = end + distanceInMs;
       if (newEnd > msInDay) {
@@ -78,13 +71,8 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
       }
     }
 
-    onChange({
-      ...data,
-      end: newEnd
-    });
+    onChange({ ...data, end: newEnd });
   };
-
-  console.log('uiState', uiState);
 
   return <div
     className={css.ScheduleInterval}
@@ -93,12 +81,12 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
     <ScheduleIntervalHandle
       direction={Direction.Left}
       value={start}
-      onResize={onResizeLeft}
+      onMove={onResizeLeft}
     />
     <ScheduleIntervalHandle
       direction={Direction.Right}
       value={end}
-      onResize={onResizeRight}
+      onMove={onResizeRight}
     />
   </div>;
 };

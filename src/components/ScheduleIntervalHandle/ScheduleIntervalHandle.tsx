@@ -12,16 +12,16 @@ import css from './ScheduleIntervalHandle.module.css';
 export interface IScheduleIntervalHandleProps {
   direction: Direction;
   value: number;
-  onResize: (data: MovementData) => void;
+  onMove: (data: MovementData) => void;
 }
 
 const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
-  const { direction, value } = props;
-  const [a, setA] = useState(0);
-  const [staticData, setStaticData] = useState({
+  const { stepSizeInPixels } = uiState;
+  const { direction, value, onMove } = props;
+  const [staticData] = useState({
     isDragging: false,
     lastX: 0
   });
@@ -38,10 +38,7 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
 
   const onPointerDown = (event: React.PointerEvent) => {
     const { pageX } = event;
-    // setStaticData({
-    //   lastX: pageX,
-    //   isDragging: true
-    // });
+
     staticData.lastX = pageX;
     staticData.isDragging = true;
   };
@@ -52,21 +49,14 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
     }
 
     const { pageX } = event;
-    const { onResize } = props;
-    const { stepSizeInPixels } = uiState;
     const movementData: MovementData = getMovementdata(
       pageX, staticData.lastX, stepSizeInPixels
     );
-    const { distanceInSteps, direction, lastX } = movementData;
-    // staticData.lastX = lastX;
+    const { distanceInSteps, lastX } = movementData;
 
     if (distanceInSteps) {
-      // setStaticData({
-      //   isDragging: true,
-      //   lastX: lastX
-      // });
       staticData.lastX = lastX;
-      onResize(movementData);
+      onMove(movementData);
     }
   };
 
@@ -88,7 +78,6 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
     >
       {msToHHMM(value)}
     </div>
-    <div style={{ display: 'none' }}>{a}</div>
   </div>
 };
 

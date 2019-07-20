@@ -16,13 +16,11 @@ export const msToHHMM = (timeMs: number): string => {
 };
 
 export const getMovementdata = (x1: number, x0: number, step: number): MovementData => {
-  // console.log(x1, x0, step);
   const diff: number = x1 - x0;
   const distance: number = Math.abs(diff);
   const distanceInSteps: number = Math.floor(distance / step);
   const direction: Direction = diff > 0 ? Direction.Right : Direction.Left;
-  const nextStepDone: number = distance % distanceInSteps;
-  // console.log('nextStepDone', nextStepDone);
+  const nextStepDone: number = distance % step;
   const newLastX = direction === Direction.Right ?
     x1 - nextStepDone:
     x1 + nextStepDone;
