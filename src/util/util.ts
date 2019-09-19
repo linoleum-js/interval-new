@@ -22,8 +22,11 @@ export const getMovementdata = (x1: number, x0: number, step: number): MovementD
   const diff: number = x1 - x0;
   const distance: number = Math.abs(diff);
   const distanceInSteps: number = Math.floor(distance / step);
+  // const distanceInSteps: number = distance / step;
+  console.log('distance', distance, distanceInSteps);
   const direction: Direction = diff > 0 ? Direction.Right : Direction.Left;
   const nextStepDone: number = distance % step;
+  // const nextStepDone: number = 0;
   const newLastX = direction === Direction.Right ?
     x1 - nextStepDone:
     x1 + nextStepDone;
@@ -41,13 +44,10 @@ export const fillScheduleWithEmpty = (data: IScheduleData): IScheduleData => {
   const newList: ScheduleIntervalData[] = [];
 
   list.forEach((item: ScheduleIntervalData, index: number) => {
+    
     if (index === 0) {
       if (item.start !== 0) {
         newList.push(new ScheduleIntervalData(0, item.end, ActivityType.Empty));
-      }
-    } else if (index === list.length - 1) {
-      if (item.end !== scheduleLength) {
-        newList.push(new ScheduleIntervalData(item.end, scheduleLength, ActivityType.Empty));
       }
     } else {
       const prev: ScheduleIntervalData = list[index - 1];
@@ -57,6 +57,11 @@ export const fillScheduleWithEmpty = (data: IScheduleData): IScheduleData => {
     }
     newList.push(item);
   });
+
+  const lastItem: ScheduleIntervalData = newList[newList.length - 1];
+  if (lastItem.end !== scheduleLength) {
+    newList.push(new ScheduleIntervalData(lastItem.end, scheduleLength, ActivityType.Empty));
+  }
 
   return {
     id,

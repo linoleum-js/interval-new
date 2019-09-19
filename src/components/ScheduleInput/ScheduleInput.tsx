@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { findIndex } from 'lodash';
 
@@ -16,19 +16,24 @@ export interface IScheduleInputProps {
 }
 
 const ScheduleInput = (props: IScheduleInputProps) => {
+  const { data } = props;
+  const { list, id } = data;
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
   const dispatch: Function = useDispatch();
-  const { data } = props;
-  const { list, id } = data;
+  const [localList, setLocalList] = useState(list);
   const listLength: number = list.length;
+
+  useEffect(() => {
+    setLocalList(list);
+  }, list);
 
   const onIntervalChange = (intervalData: ScheduleIntervalData) => {
     const { start, end, type, id: intervalId } = intervalData;
-    const changedDataIndex: number = findIndex(list, { id: intervalId });
-    let prevItems: ScheduleIntervalData[] = list.slice(0, changedDataIndex);
-    let nextItems: ScheduleIntervalData[] = list.slice(changedDataIndex + 1);
+    const changedDataIndex: number = findIndex(localList, { id: intervalId });
+    let prevItems: ScheduleIntervalData[] = localList.slice(0, changedDataIndex);
+    let nextItems: ScheduleIntervalData[] = localList.slice(changedDataIndex + 1);
 
     // If an interval item has changed, we have to update the previous
     // and next items.
@@ -41,19 +46,25 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     if (nextItems.length) {
       const firstItem: ScheduleIntervalData = nextItems.shift()!;
       // set the next item's end where the current item's end is
-      nextItems = [...nextItems, { ...firstItem, start: end }];
+      nextItems = [{ ...firstItem, start: end }, ...nextItems];
     }
+
+    setLocalList([...prevItems, intervalData, ...nextItems]);
+  };
+
+  const onChangeFinish = () => {
     dispatch(updateSchedule({
-      id, list: [...prevItems, intervalData, ...nextItems]
+      id, list: localList
     }));
   };
 
   return <div className={css.ScheduleList}>
-    {list.map((item: ScheduleIntervalData) => {
+    {localList.map((item: ScheduleIntervalData) => {
       return <ScheduleInterval
         key={item.id}
         data={item}
         onChange={onIntervalChange}
+        onChangeFinish={onChangeFinish}
       />;
     })}
   </div>;

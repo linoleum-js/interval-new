@@ -17,7 +17,14 @@ const schedule: IScheduleData = {
     end: 380 * 60 * 1000,
     type: 2,
     id: '2'
-  }]
+  }
+  // , {
+  //   start: 720 * 60 * 1000,
+  //   end: 780 * 60 * 1000,
+  //   type: 2,
+  //   id: '3'
+  // }
+]
 };
 
 const data: IScheduleData[] = [schedule];
@@ -40,17 +47,16 @@ export interface ScheduleActionPayload {
 
 export interface RequestScheduleListAction {
   type: ScheduleActionTypes.RequestScheduleList;
-  payload: ScheduleActionPayload;
 }
 
 export interface ReceiveScheduleListAction {
   type: ScheduleActionTypes.ReceiveScheduleList;
-  payload: ScheduleActionPayload;
+  payload: IScheduleData[];
 }
 
 export interface UpdateScheduleAction {
   type: ScheduleActionTypes.UpdateScheduleList;
-  payload: ScheduleActionPayload;
+  payload: IScheduleData;
 }
 
 export type ScheduleAction =
@@ -61,18 +67,14 @@ export type ScheduleAction =
 export const updateSchedule = (data: IScheduleData) => (dispatch: Function) => {
   dispatch({
     type: ScheduleActionTypes.UpdateScheduleList,
-    payload: {
-      schedule: data
-    }
+    payload: data
   });
 };
 
 export const fetchScheduleList = () => async (dispatch: Function) => {
   dispatch({
     type: ScheduleActionTypes.ReceiveScheduleList,
-    payload: {
-      list: data.map((item: IScheduleData) => fillScheduleWithEmpty(item))
-    }
+    payload: data.map((item: IScheduleData) => fillScheduleWithEmpty(item))
   });
 };
 
@@ -85,7 +87,7 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
   state: IScheduleListState = initialState,
   action: Action
 ): IScheduleListState => {
-  const { type, payload } = action as ScheduleAction;
+  const { type } = action as ScheduleAction;
 
   switch (type) {
     case ScheduleActionTypes.RequestScheduleList:
@@ -93,14 +95,17 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
         isLoading: true,
         list: []
       };
-    case ScheduleActionTypes.ReceiveScheduleList:
+
+    case ScheduleActionTypes.ReceiveScheduleList:  
+      const { payload: scheduleList } = action as ReceiveScheduleListAction;
       return {
         isLoading: false,
-        list: payload.list!
+        list: scheduleList
       };
+
     case ScheduleActionTypes.UpdateScheduleList:
+      const { payload: schedule } = action as UpdateScheduleAction;
       const { list } = state;
-      const schedule: IScheduleData = payload.schedule!;
       const index: number = findIndex(list, { id: schedule.id });
       const nextItems: IScheduleData[] = list.slice(0, index);
       const prevItems: IScheduleData[] = list.slice(index + 1);

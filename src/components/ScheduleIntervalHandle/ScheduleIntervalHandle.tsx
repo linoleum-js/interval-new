@@ -13,6 +13,8 @@ export interface IScheduleIntervalHandleProps {
   direction: Direction;
   value: number;
   onMove: (data: MovementData) => void;
+  onMoveEnd: () => void;
+  id?: string;
 }
 
 const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
@@ -20,11 +22,12 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
     state.uiState
   );
   const { stepSizeInPixels } = uiState;
-  const { direction, value, onMove } = props;
+  const { direction, value, onMove, onMoveEnd, id } = props;
   const [staticData] = useState({
     isDragging: false,
     lastX: 0
   });
+  // const [lastX, setLastX] = useState(0);
   
   const getDirectionClassName = (): string => {
     return direction === Direction.Left ?
@@ -32,14 +35,19 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
       css.ScheduleIntervalHandleRight;
   };
 
-  const onPointerUp = () => {
+  const onDragEnd = () => {
+    if (staticData.isDragging) {
+      onMoveEnd();
+    }
     staticData.isDragging = false;
   };
 
-  const onPointerDown = (event: React.PointerEvent) => {
+  const onDragStart = (event: React.PointerEvent) => {
     const { pageX } = event;
 
     staticData.lastX = pageX;
+    // console.log('pageX', pageX);
+    // setLastX(pageX);
     staticData.isDragging = true;
   };
 
@@ -54,27 +62,33 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
     );
     const { distanceInSteps, lastX } = movementData;
 
+    // console.log('pageX', pageX);
+    staticData.lastX = lastX;
+    // setLastX(pageX);
     if (distanceInSteps) {
-      staticData.lastX = lastX;
       onMove(movementData);
     }
   };
 
   useEffect(() => {
     document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('pointerup', onPointerUp);
+    document.addEventListener('pointerup', onDragEnd);
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('pointerup', onPointerUp);
+      document.removeEventListener('pointerup', onDragEnd);
     };
   });
+
+  if (id === '2' && direction === Direction.Right) {
+    console.log('lastX', staticData.lastX);
+  }
 
   return <div
     className={`${css.ScheduleIntervalHandle} ${getDirectionClassName()}`}
   >
     <div
       className={css.ScheduleIntervalHandleBody}
-      onPointerDown={onPointerDown}
+      onPointerDown={onDragStart}
     >
       {msToHHMM(value)}
     </div>

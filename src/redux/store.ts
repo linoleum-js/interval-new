@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 
 import { scheduleListsReducer, IScheduleListState } from '@redux/scheduleLists/ScheduleListsStore';
 import { uiStateReducer, IUiState } from './uiState/uiStateStore';
@@ -15,7 +16,7 @@ const store = createStore(
     uiState: uiStateReducer
   }),
   compose(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk, logger)
   )
 );
 

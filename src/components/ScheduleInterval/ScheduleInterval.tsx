@@ -16,18 +16,19 @@ import css from './ScheduleInterval.module.css';
 export interface IScheduleIntervalProps {
   data: ScheduleIntervalData;
   onChange: (data: ScheduleIntervalData) => void;
+  onChangeFinish: () => void;
 }
 
 const ScheduleInterval = (props: IScheduleIntervalProps) => {
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
-  const { data, onChange } = props;
+  const { data, onChange, onChangeFinish } = props;
   const { start, end, type, id } = data;
   const { stepSizeInPixels } = uiState;
 
   const toPixels = (value: number): number => {
-    return value / stepSizeInMs * stepSizeInPixels;
+    return value * stepSizeInPixels / stepSizeInMs;
   };
 
   const style: CSSProperties = {
@@ -82,11 +83,15 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
       direction={Direction.Left}
       value={start}
       onMove={onResizeLeft}
+      onMoveEnd={onChangeFinish}
     />
+    {/* {id} */}
     <ScheduleIntervalHandle
       direction={Direction.Right}
       value={end}
       onMove={onResizeRight}
+      onMoveEnd={onChangeFinish}
+      id={id}
     />
   </div>;
 };

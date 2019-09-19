@@ -21,11 +21,10 @@ const ScheduleInputCollection = (props: IScheduleInputCollectionProps) => {
     dispatch(fetchScheduleList());
   }, []);
 
-  console.log('listState', listState);
-
   return <div>
     {list.map((item: IScheduleData) => {
       return <ScheduleInput
+        key={item.id}
         data={item}
       />
     })}
