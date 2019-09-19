@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { findIndex } from 'lodash';
 
 import ScheduleInterval from '../ScheduleInterval/ScheduleInterval';
-import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
+import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IAppState } from '@redux/store';
 import { IUiState } from '@redux/uiState/uiStateStore';
 import { IScheduleData } from '@models/IScheduleData';
@@ -24,22 +24,22 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const { list, id } = data;
   const listLength: number = list.length;
 
-  const onIntervalChange = (intervalData: IScheduleIntervalData) => {
+  const onIntervalChange = (intervalData: ScheduleIntervalData) => {
     const { start, end, type, id: intervalId } = intervalData;
     const changedDataIndex: number = findIndex(list, { id: intervalId });
-    let prevItems: Array<IScheduleIntervalData> = list.slice(0, changedDataIndex);
-    let nextItems: Array<IScheduleIntervalData> = list.slice(changedDataIndex + 1);
+    let prevItems: ScheduleIntervalData[] = list.slice(0, changedDataIndex);
+    let nextItems: ScheduleIntervalData[] = list.slice(changedDataIndex + 1);
 
     // If an interval item has changed, we have to update the previous
     // and next items.
 
     if (prevItems.length) {
-      const lastItem: IScheduleIntervalData = prevItems.pop()!;
+      const lastItem: ScheduleIntervalData = prevItems.pop()!;
       // set the previous item's end where the current item's start is
       prevItems = [...prevItems, { ...lastItem, end: start }];
     }
     if (nextItems.length) {
-      const firstItem: IScheduleIntervalData = nextItems.shift()!;
+      const firstItem: ScheduleIntervalData = nextItems.shift()!;
       // set the next item's end where the current item's end is
       nextItems = [...nextItems, { ...firstItem, start: end }];
     }
@@ -49,7 +49,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   };
 
   return <div className={css.ScheduleList}>
-    {list.map((item: IScheduleIntervalData) => {
+    {list.map((item: ScheduleIntervalData) => {
       return <ScheduleInterval
         key={item.id}
         data={item}

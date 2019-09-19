@@ -1,6 +1,6 @@
 import { Reducer, Action } from 'redux';
 
-import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
+import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 
 export interface IUiState {
   widthInPixels: number;

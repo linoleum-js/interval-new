@@ -5,17 +5,17 @@ import { useSelector } from 'react-redux';
 import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
-import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
+import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IUiState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
-import { stepSizeInMs, msInDay } from '@constants/constants';
+import { stepSizeInMs, scheduleLength } from '@constants/constants';
 import { activityColor } from '@constants/schedule';
 
 import css from './ScheduleInterval.module.css';
 
 export interface IScheduleIntervalProps {
-  data: IScheduleIntervalData;
-  onChange: (data: IScheduleIntervalData) => void;
+  data: ScheduleIntervalData;
+  onChange: (data: ScheduleIntervalData) => void;
 }
 
 const ScheduleInterval = (props: IScheduleIntervalProps) => {
@@ -61,7 +61,7 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
     let newEnd: number;
     if (direction === Direction.Right) {
       newEnd = end + distanceInMs;
-      if (newEnd > msInDay) {
+      if (newEnd > scheduleLength) {
         newEnd = newEnd;
       }
     } else {

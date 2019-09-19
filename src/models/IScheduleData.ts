@@ -1,6 +1,6 @@
-import { IScheduleIntervalData } from "./IScheduleIntervalData";
+import { ScheduleIntervalData } from "./ScheduleIntervalData";
 
 export interface IScheduleData {
   id: string;
-  list: Array<IScheduleIntervalData>;
+  list: ScheduleIntervalData[];
 }

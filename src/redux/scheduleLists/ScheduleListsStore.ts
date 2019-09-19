@@ -1,8 +1,9 @@
 import { Reducer, Action } from 'redux';
 import { findIndex } from 'lodash';
 
-import { IScheduleIntervalData } from '@models/IScheduleIntervalData';
+import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
+import { fillScheduleWithEmpty } from '@util/util';
 
 const schedule: IScheduleData = {
   id: '123123',
@@ -19,11 +20,11 @@ const schedule: IScheduleData = {
   }]
 };
 
-const data: Array<IScheduleData> = [schedule];
+const data: IScheduleData[] = [schedule];
 
 export interface IScheduleListState {
   isLoading: boolean;
-  list: Array<IScheduleData>;
+  list: IScheduleData[];
 }
 
 export enum ScheduleActionTypes {
@@ -33,7 +34,7 @@ export enum ScheduleActionTypes {
 }
 
 export interface ScheduleActionPayload {
-  list?: Array<IScheduleData>;
+  list?: IScheduleData[];
   schedule?: IScheduleData;
 }
 
@@ -70,7 +71,7 @@ export const fetchScheduleList = () => async (dispatch: Function) => {
   dispatch({
     type: ScheduleActionTypes.ReceiveScheduleList,
     payload: {
-      list: data
+      list: data.map((item: IScheduleData) => fillScheduleWithEmpty(item))
     }
   });
 };
@@ -101,8 +102,8 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
       const { list } = state;
       const schedule: IScheduleData = payload.schedule!;
       const index: number = findIndex(list, { id: schedule.id });
-      const nextItems: Array<IScheduleData> = list.slice(0, index);
-      const prevItems: Array<IScheduleData> = list.slice(index + 1);
+      const nextItems: IScheduleData[] = list.slice(0, index);
+      const prevItems: IScheduleData[] = list.slice(index + 1);
 
       return {
         isLoading: false,

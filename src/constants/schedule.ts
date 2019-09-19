@@ -1,5 +1,5 @@
 
-import { ActivityType } from '@models/IActivityType';
+import { ActivityType } from '@models/ActivityType';
 
 export const activityColor = {
   [ActivityType.Empty]: 'transparent',
