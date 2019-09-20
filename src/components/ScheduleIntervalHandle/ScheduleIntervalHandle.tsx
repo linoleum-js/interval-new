@@ -1,5 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+// @ts-ignore
+import {useThrottle, useThrottleCallback} from '@react-hook/throttle';
+// @ts-ignore
+import {useDebounce, useDebounceCallback} from '@react-hook/debounce';
 
 import { msToHHMM, getMovementdata } from '@util/util';
 import { Direction } from '@models/Direction';
@@ -25,9 +30,9 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
   const { direction, value, onMove, onMoveEnd, id } = props;
   const [staticData] = useState({
     isDragging: false,
-    lastX: 0
+    lastX: 0,
+    nextStepDone: 0
   });
-  // const [lastX, setLastX] = useState(0);
   
   const getDirectionClassName = (): string => {
     return direction === Direction.Left ?
@@ -46,8 +51,6 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
     const { pageX } = event;
 
     staticData.lastX = pageX;
-    // console.log('pageX', pageX);
-    // setLastX(pageX);
     staticData.isDragging = true;
   };
 
@@ -58,30 +61,30 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
 
     const { pageX } = event;
     const movementData: MovementData = getMovementdata(
-      pageX, staticData.lastX, stepSizeInPixels
+      pageX, staticData.lastX, stepSizeInPixels, staticData.nextStepDone
     );
-    const { distanceInSteps, lastX } = movementData;
+    const { distanceInSteps, lastX, nextStepDone } = movementData;
 
-    // console.log('pageX', pageX);
-    staticData.lastX = lastX;
-    // setLastX(pageX);
-    if (distanceInSteps) {
+    if (id === '2' && direction === Direction.Right) {
+      // console.log('lastX', staticData.lastX, pageX);
+    }
+    staticData.nextStepDone = nextStepDone;
+    if (distanceInSteps || true) {
+      staticData.lastX = pageX;
       onMove(movementData);
     }
   };
 
+  const throttledMouseMove = useThrottleCallback(onMouseMove, 1050);
+
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousemove', throttledMouseMove);
     document.addEventListener('pointerup', onDragEnd);
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', throttledMouseMove);
       document.removeEventListener('pointerup', onDragEnd);
     };
   });
-
-  if (id === '2' && direction === Direction.Right) {
-    console.log('lastX', staticData.lastX);
-  }
 
   return <div
     className={`${css.ScheduleIntervalHandle} ${getDirectionClassName()}`}

@@ -18,29 +18,29 @@ export const msToHHMM = (timeMs: number): string => {
   return `${pad2(hours)}:${pad2(minutes)}`;
 };
 
-export const getMovementdata = (x1: number, x0: number, step: number): MovementData => {
+export const getMovementdata = (x1: number, x0: number, step: number, nextStepDone: number): MovementData => {
   const diff: number = x1 - x0;
   const distance: number = Math.abs(diff);
-  const distanceInSteps: number = Math.floor(distance / step);
-  // const distanceInSteps: number = distance / step;
-  console.log('distance', distance, distanceInSteps);
+  // const distanceInSteps: number = Math.floor(distance / step);
+  const distanceInSteps: number = distance;
   const direction: Direction = diff > 0 ? Direction.Right : Direction.Left;
-  const nextStepDone: number = distance % step;
-  // const nextStepDone: number = 0;
-  const newLastX = direction === Direction.Right ?
-    x1 - nextStepDone:
-    x1 + nextStepDone;
+  // let newNextStepDone: number = distance % step;
+  let newNextStepDone: number = 0;
+  newNextStepDone = direction === Direction.Right ?
+    newNextStepDone:
+    -newNextStepDone;
+  // const newLastX = x1;
 
   return {
-    nextStepDone,
+    nextStepDone: newNextStepDone,
     direction,
     distanceInSteps,
-    lastX: newLastX
+    lastX: x1
   };
 };
 
 export const fillScheduleWithEmpty = (data: IScheduleData): IScheduleData => {
-  const { list, id } = data;
+  const { list } = data;
   const newList: ScheduleIntervalData[] = [];
 
   list.forEach((item: ScheduleIntervalData, index: number) => {
@@ -64,7 +64,7 @@ export const fillScheduleWithEmpty = (data: IScheduleData): IScheduleData => {
   }
 
   return {
-    id,
+    ...data,
     list: newList
   };
 };

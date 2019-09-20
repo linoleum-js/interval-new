@@ -12,7 +12,7 @@ export interface IScheduleInputCollectionProps {
 
 const ScheduleInputCollection = (props: IScheduleInputCollectionProps) => {
   const listState: IScheduleListState = useSelector((state: IAppState) =>
-    state.scheduleLists
+    state.scheduleLists, () => false
   );
   const { isLoading, list } = listState;
 
@@ -26,6 +26,7 @@ const ScheduleInputCollection = (props: IScheduleInputCollectionProps) => {
       return <ScheduleInput
         key={item.id}
         data={item}
+        id={item.id}
       />
     })}
   </div>;

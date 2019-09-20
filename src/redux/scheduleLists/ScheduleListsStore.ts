@@ -5,29 +5,82 @@ import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
 import { fillScheduleWithEmpty } from '@util/util';
 
+// const schedule: IScheduleData = {
+//   id: '123123',
+//   userName: '123123',
+//   list: [
+//   //   {
+//   //   start: 0 * 60 * 1000,
+//   //   end: 60 * 60 * 1000,
+//   //   type: 1,
+//   //   id: '1'
+//   // },
+//   {
+//     start: 250 * 60 * 1000,
+//     end: 380 * 60 * 1000,
+//     type: 2,
+//     id: '2'
+//   }
+//   , {
+//     start: 720 * 60 * 1000,
+//     end: 780 * 60 * 1000,
+//     type: 2,
+//     id: '3'
+//   }
+//   , {
+//     start: 1020 * 60 * 1000,
+//     end: 1080 * 60 * 1000,
+//     type: 2,
+//     id: '4'
+//   }
+// ]
+// };
+
+
 const schedule: IScheduleData = {
   id: '123123',
-  list: [{
-    start: 0 * 60 * 1000,
-    end: 60 * 60 * 1000,
-    type: 1,
-    id: '1'
-  }, {
-    start: 250 * 60 * 1000,
-    end: 380 * 60 * 1000,
+  userName: '123123',
+  list: [
+  //   {
+  //   start: 0 * 60 * 1000,
+  //   end: 60 * 60 * 1000,
+  //   type: 1,
+  //   id: '1'
+  // },
+  {
+    start: 100,
+    end: 200,
     type: 2,
     id: '2'
   }
-  // , {
-  //   start: 720 * 60 * 1000,
-  //   end: 780 * 60 * 1000,
-  //   type: 2,
-  //   id: '3'
-  // }
+  , {
+    start: 400,
+    end: 500,
+    type: 2,
+    id: '3'
+  }
+  , {
+    start: 1020 * 60 * 1000,
+    end: 1080 * 60 * 1000,
+    type: 2,
+    id: '4'
+  }
 ]
 };
 
-const data: IScheduleData[] = [schedule];
+const data: IScheduleData[] = [schedule
+  // , {...schedule, id: '1'}
+  // , {...schedule, id: '2'}
+  // , {...schedule, id: '3'}
+  // , {...schedule, id: '4'}
+  // , {...schedule, id: '5'}
+  // , {...schedule, id: '6'}
+  // , {...schedule, id: '7'}
+  // , {...schedule, id: '8'}
+  // , {...schedule, id: '9'}
+  // , {...schedule, id: '10'}
+  // , {...schedule, id: '11'}
+];
 
 export interface IScheduleListState {
   isLoading: boolean;
@@ -107,8 +160,8 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
       const { payload: schedule } = action as UpdateScheduleAction;
       const { list } = state;
       const index: number = findIndex(list, { id: schedule.id });
-      const nextItems: IScheduleData[] = list.slice(0, index);
-      const prevItems: IScheduleData[] = list.slice(index + 1);
+      const prevItems: IScheduleData[] = list.slice(0, index);
+      const nextItems: IScheduleData[] = list.slice(index + 1);
 
       return {
         isLoading: false,
