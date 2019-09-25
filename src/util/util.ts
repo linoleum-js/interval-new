@@ -3,7 +3,7 @@ import { Direction } from '@models/Direction';
 import { IScheduleData } from '@models/IScheduleData';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { ActivityType } from '@models/ActivityType';
-import { scheduleLength } from '@constants/constants';
+import { scheduleLength, stepSizeInMs } from '@constants/constants';
 
 export const pad2 = (value: string): string => {
   return value.length === 2 ? value : `0${value}`;
@@ -21,17 +21,18 @@ export const msToHHMM = (timeMs: number): string => {
 export const getMovementdata = (x1: number, x0: number, step: number): MovementData => {
   const diff: number = x1 - x0;
   const distance: number = Math.abs(diff);
+  const sign: number = Math.sign(diff);
   const distanceInSteps: number = Math.floor(distance / step);
   const direction: Direction = diff > 0 ? Direction.Right : Direction.Left;
-  let nextStepDone: number = distance % step;
-  const lastX = direction === Direction.Right ?
-    x1 - nextStepDone:
-    x1 + nextStepDone;
+  const nextStepDone: number = distance % step;
+  const lastX = x1 - sign * nextStepDone;
+  const diffInMs = sign * distanceInSteps * stepSizeInMs;
 
   return {
-    nextStepDone: nextStepDone,
+    nextStepDone,
     direction,
     distanceInSteps,
+    diffInMs,
     lastX
   };
 };

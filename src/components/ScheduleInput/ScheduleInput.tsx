@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { findIndex, isEqual } from 'lodash';
+import { findIndex, isEqual, find } from 'lodash';
 
 import ScheduleInterval from '../ScheduleInterval/ScheduleInterval';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IAppState } from '@redux/store';
 import { IUiState } from '@redux/uiState/uiStateStore';
+import { MovementData } from '@models/MovementData';
 import { IScheduleData } from '@models/IScheduleData';
 
-import css from './ScheduleInput.module.css';
 import { updateSchedule } from '@redux/scheduleLists/ScheduleListsStore';
+
+import css from './ScheduleInput.module.css';
+import { stepSizeInMs, scheduleLength, intervalMinWidth } from '@constants/constants';
 
 export interface IScheduleInputProps {
   data: IScheduleData;
@@ -17,23 +20,13 @@ export interface IScheduleInputProps {
 }
 
 const ScheduleInput = (props: IScheduleInputProps) => {
-  const { id } = props;
-  // const { list, id } = data;
-  const uiState: IUiState = useSelector((state: IAppState) =>
-    state.uiState
-  );
-  
-  
-  const listState = useSelector((state: IAppState) =>
-    state.scheduleLists, () => false
-  );
-  const { isLoading, list: stateList } = listState;
-  const data = stateList.filter((item) => item.id === id)[0];
+  const { id, data } = props;
+  const uiState: IUiState = useSelector((state: IAppState) => state.uiState);
   const { list } = data;
   const dispatch: Function = useDispatch();
   const [localList, setLocalList] = useState(list);
-  const listLength: number = list.length;
-  // const localList = list;
+  const [itemInFocus, setItemInFocus] = useState<string | null>(null);
+  const domNode = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // We don't want to update store every time anything changes,
@@ -42,13 +35,11 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     // dragging stuff around, and then dispatch only when it's done
     // (on MouseUp or PointerUp events, see onChangeFinish)
     setLocalList(list);
-    console.log('setLocalList');
   }, []);
 
-  const onIntervalChange = (intervalData: ScheduleIntervalData, oldData: any) => {
+  const onIntervalChange = (intervalData: ScheduleIntervalData) => {
     const { start, end, type, id: intervalId } = intervalData;
     const changedDataIndex: number = findIndex(localList, { id: intervalId });
-    const oldInterval = {...localList[changedDataIndex]};
     let prevItems: ScheduleIntervalData[] = localList.slice(0, changedDataIndex);
     let nextItems: ScheduleIntervalData[] = localList.slice(changedDataIndex + 1);
 
@@ -67,14 +58,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     }
 
     setLocalList([...prevItems, intervalData, ...nextItems]);
-    console.log('intervalData', oldData, intervalData);
-    
-    // dispatch(updateSchedule({
-    //   ...data,
-    //   list: [...prevItems, intervalData, ...nextItems]
-    // }));
   };
-  // console.log('state', localList[1]);
 
   const onChangeFinish = () => {
     dispatch(updateSchedule({
@@ -83,35 +67,78 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     }));
   };
 
-  const onResizeLeft = (dx: number, intervalId: string) => {
+  const onResizeLeft = (movementData: MovementData, intervalId: string) => {
     setLocalList((localList) => {
-      const interval = localList.filter(({ id }) => id === intervalId)[0];
+      const interval = find(localList, { id: intervalId })!;
+      const { diffInMs } = movementData;
       const { start, end } = interval;
-      let newStart = start + dx;
-      onIntervalChange({ ...interval, start: newStart }, interval);
+      let newStart = start + diffInMs;
+      if (newStart < 0) {
+        newStart = 0;
+      } else if (newStart > end - stepSizeInMs) {
+        newStart = end - stepSizeInMs;
+      }
+      onIntervalChange({ ...interval, start: newStart });
       return localList;
     });
   };
 
-  const onResizeRight = (dx: number, intervalId: string) => {
+  const onResizeRight = (movementData: MovementData, intervalId: string) => {
     setLocalList((localList) => {
-      const interval = localList.filter(({ id }) => id === intervalId)[0];
-      const { start, end } = interval;
-      let newEnd = end + dx;
-      onIntervalChange({ ...interval, end: newEnd }, interval);
+      const interval = find(localList, { id: intervalId })!;
+      const { diffInMs } = movementData;
+      const { end, start } = interval;
+      let newEnd = end + diffInMs;
+      if (newEnd > scheduleLength) {
+        newEnd = scheduleLength;
+      } else if (newEnd < start + stepSizeInMs) {
+        newEnd = start + stepSizeInMs;
+      }
+      onIntervalChange({ ...interval, end: newEnd });
       return localList;
     });
   };
 
-  return <div className={css.ScheduleList}>
+  const onItemFocus = (id: string) => {
+    setItemInFocus(id);
+  };
+
+  const onItemBlur = (id: string) => {
+    if (id === itemInFocus) {
+      setItemInFocus(null);
+    }
+  };
+
+  const onOutsideClick = (event: Event) => {
+    const target = event.target as Node;
+    if (domNode.current && !domNode.current.contains(target)) {
+      setItemInFocus(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('pointerdown', onOutsideClick);
+    return () => {
+      document.removeEventListener('pointerdown', onOutsideClick);
+    };
+  });
+
+  return <div
+    className={css.ScheduleList}
+    ref={domNode}
+  >
     {localList.map((item: ScheduleIntervalData) => {
       return <ScheduleInterval
         key={item.id}
         data={item}
-        onChange={onIntervalChange}
         onChangeFinish={onChangeFinish}
         intervalId={item.id}
         inputId={id}
+        onResizeLeft={onResizeLeft}
+        onResizeRight={onResizeRight}
+        onFocus={onItemFocus}
+        onBlur={onItemBlur}
+        isInFocus={itemInFocus === item.id}
       />;
     })}
   </div>;

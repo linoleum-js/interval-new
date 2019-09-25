@@ -1,11 +1,12 @@
 
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useRef, Ref } from 'react';
 import { useSelector } from 'react-redux';
 
 import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
+import { ActivityType } from '@models/ActivityType';
 import { IUiState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
 import { stepSizeInMs, scheduleLength } from '@constants/constants';
@@ -15,29 +16,31 @@ import css from './ScheduleInterval.module.css';
 
 export interface IScheduleIntervalProps {
   data: ScheduleIntervalData;
-  onChange: (data: ScheduleIntervalData, prevData?: any) => void;
   onChangeFinish: () => void;
   intervalId: string;
   inputId: string;
+  onResizeLeft: (movementData: MovementData, id: string) => void;
+  onResizeRight: (movementData: MovementData, id: string) => void;
+  onFocus: (id: string) => void;
+  onBlur: (id: string) => void;
+  isInFocus: boolean;
 }
 
 const ScheduleInterval = (props: IScheduleIntervalProps) => {
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
-  const listState = useSelector((state: IAppState) =>
-    state.scheduleLists, () => false
-  );
-  const { onChange, onChangeFinish, intervalId, inputId } = props;
+  const { onChangeFinish, onFocus, onBlur, isInFocus } = props;
   const { data } = props;
 
   const { start, end, type, id } = data;
+  const isEmpty: boolean = type === ActivityType.Empty;
   const { stepSizeInPixels } = uiState;
 
   const toPixels = (value: number): number => {
     return value * stepSizeInPixels / stepSizeInMs;
   };
-
+  
   const style: CSSProperties = {
     left: toPixels(start),
     width: toPixels(end - start),
@@ -45,62 +48,36 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   };
 
   const onResizeLeft = (movementData: MovementData) => {
-    const { distanceInSteps, direction } = movementData;
-    const distanceInMs: number = distanceInSteps * stepSizeInMs;
-    let newStart: number;
-    if (direction === Direction.Left) {
-      newStart = start - distanceInMs;
-      if (newStart < 0) {
-        newStart = 0;
-      }
-    } else {
-      newStart = start + distanceInMs;
-      if (newStart > end - stepSizeInPixels) { 
-        newStart = end - stepSizeInPixels;
-      }
-    }
-
-    onChange({ ...data, start: newStart });
+    props.onResizeLeft(movementData, id);
   };
 
   const onResizeRight = (movementData: MovementData) => {
-    const { distanceInSteps, direction } = movementData;
-    const distanceInMs: number = distanceInSteps * stepSizeInMs;
-    
-    let newEnd: number;
-    if (direction === Direction.Right) {
-      newEnd = end + distanceInMs;
-      if (newEnd > scheduleLength) {
-        newEnd = newEnd;
-      }
-    } else {
-      newEnd = end - distanceInMs;
-      if (newEnd < start + stepSizeInPixels) { 
-        newEnd = start + stepSizeInPixels;
-      }
-    }
-
-    onChange({ ...data, end: newEnd });
+    props.onResizeRight(movementData, id);
   };
+
 
   return <div
     className={css.ScheduleInterval}
     style={style}
+    onPointerDown={() => onFocus(id)}
   >
-    <ScheduleIntervalHandle
-      direction={Direction.Left}
-      value={start}
-      onMove={onResizeLeft}
-      onMoveEnd={onChangeFinish}
-    />
-    {/* {id} */}
-    <ScheduleIntervalHandle
-      direction={Direction.Right}
-      value={end}
-      onMove={onResizeRight}
-      onMoveEnd={onChangeFinish}
-      id={id}
-    />
+    {!isEmpty && isInFocus &&
+      <>
+        <ScheduleIntervalHandle
+          direction={Direction.Left}
+          value={start}
+          onMove={onResizeLeft}
+          onMoveEnd={onChangeFinish}
+        />
+        <ScheduleIntervalHandle
+          direction={Direction.Right}
+          value={end}
+          onMove={onResizeRight}
+          onMoveEnd={onChangeFinish}
+          id={id}
+        />
+      </>
+    }
   </div>;
 };
 

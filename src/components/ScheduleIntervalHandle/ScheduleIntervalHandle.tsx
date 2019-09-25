@@ -70,13 +70,13 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
     }
   };
 
-  // const throttledMouseMove = useThrottleCallback(onMouseMove, 150);
+  const throttledMouseMove = useThrottleCallback(onMouseMove, 150);
 
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousemove', throttledMouseMove);
     document.addEventListener('pointerup', onDragEnd);
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', throttledMouseMove);
       document.removeEventListener('pointerup', onDragEnd);
     };
   });
