@@ -16,8 +16,6 @@ import css from './ScheduleInterval.module.css';
 export interface IScheduleIntervalProps {
   data: ScheduleIntervalData;
   onChange: (data: ScheduleIntervalData, prevData?: any) => void;
-  onResizeLeft: (dx: number, id: string) => void;
-  onResizeRight: (dx: number, id: string) => void;
   onChangeFinish: () => void;
   intervalId: string;
   inputId: string;
@@ -32,19 +30,12 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   );
   const { onChange, onChangeFinish, intervalId, inputId } = props;
   const { data } = props;
-  const { list: inputs } = listState;
-  const input = inputs.filter(({ id }) => id === inputId)[0];
-  // const data = input.list.filter(({ id }) => id === intervalId)[0];
 
   const { start, end, type, id } = data;
   const { stepSizeInPixels } = uiState;
 
-  // const toPixels = (value: number): number => {
-  //   return value * stepSizeInPixels / stepSizeInMs;
-  // };
-  
   const toPixels = (value: number): number => {
-    return value;
+    return value * stepSizeInPixels / stepSizeInMs;
   };
 
   const style: CSSProperties = {
@@ -55,8 +46,7 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
 
   const onResizeLeft = (movementData: MovementData) => {
     const { distanceInSteps, direction } = movementData;
-    // const distanceInMs: number = distanceInSteps * stepSizeInMs;
-    const distanceInMs: number = distanceInSteps;
+    const distanceInMs: number = distanceInSteps * stepSizeInMs;
     let newStart: number;
     if (direction === Direction.Left) {
       newStart = start - distanceInMs;
@@ -70,15 +60,12 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
       }
     }
 
-    let dx = direction === Direction.Left ? -distanceInMs : distanceInMs;
-    props.onResizeLeft(dx, id);
-    // onChange({ ...data, start: newStart }, data);
+    onChange({ ...data, start: newStart });
   };
 
   const onResizeRight = (movementData: MovementData) => {
     const { distanceInSteps, direction } = movementData;
-    // const distanceInMs: number = distanceInSteps * stepSizeInMs;
-    const distanceInMs: number = distanceInSteps;
+    const distanceInMs: number = distanceInSteps * stepSizeInMs;
     
     let newEnd: number;
     if (direction === Direction.Right) {
@@ -93,9 +80,7 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
       }
     }
 
-    let dx = direction === Direction.Left ? -distanceInMs : distanceInMs;
-    props.onResizeRight(dx, id);
-    // onChange({ ...data, end: newEnd }, data);
+    onChange({ ...data, end: newEnd });
   };
 
   return <div

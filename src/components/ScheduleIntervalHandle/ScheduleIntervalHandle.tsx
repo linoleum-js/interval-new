@@ -30,8 +30,7 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
   const { direction, value, onMove, onMoveEnd, id } = props;
   const [staticData] = useState({
     isDragging: false,
-    lastX: 0,
-    nextStepDone: 0
+    lastX: 0
   });
   
   const getDirectionClassName = (): string => {
@@ -61,27 +60,23 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
 
     const { pageX } = event;
     const movementData: MovementData = getMovementdata(
-      pageX, staticData.lastX, stepSizeInPixels, staticData.nextStepDone
+      pageX, staticData.lastX, stepSizeInPixels
     );
-    const { distanceInSteps, lastX, nextStepDone } = movementData;
+    const { distanceInSteps, lastX } = movementData;
 
-    if (id === '2' && direction === Direction.Right) {
-      // console.log('lastX', staticData.lastX, pageX);
-    }
-    staticData.nextStepDone = nextStepDone;
-    if (distanceInSteps || true) {
-      staticData.lastX = pageX;
+    if (distanceInSteps) {
+      staticData.lastX = lastX;
       onMove(movementData);
     }
   };
 
-  const throttledMouseMove = useThrottleCallback(onMouseMove, 1050);
+  // const throttledMouseMove = useThrottleCallback(onMouseMove, 150);
 
   useEffect(() => {
-    document.addEventListener('mousemove', throttledMouseMove);
+    document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('pointerup', onDragEnd);
     return () => {
-      document.removeEventListener('mousemove', throttledMouseMove);
+      document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('pointerup', onDragEnd);
     };
   });

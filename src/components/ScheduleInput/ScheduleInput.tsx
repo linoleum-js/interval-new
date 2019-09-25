@@ -112,8 +112,6 @@ const ScheduleInput = (props: IScheduleInputProps) => {
         onChangeFinish={onChangeFinish}
         intervalId={item.id}
         inputId={id}
-        onResizeLeft={onResizeLeft}
-        onResizeRight={onResizeRight}
       />;
     })}
   </div>;

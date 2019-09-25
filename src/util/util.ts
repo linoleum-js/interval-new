@@ -18,24 +18,21 @@ export const msToHHMM = (timeMs: number): string => {
   return `${pad2(hours)}:${pad2(minutes)}`;
 };
 
-export const getMovementdata = (x1: number, x0: number, step: number, nextStepDone: number): MovementData => {
+export const getMovementdata = (x1: number, x0: number, step: number): MovementData => {
   const diff: number = x1 - x0;
   const distance: number = Math.abs(diff);
-  // const distanceInSteps: number = Math.floor(distance / step);
-  const distanceInSteps: number = distance;
+  const distanceInSteps: number = Math.floor(distance / step);
   const direction: Direction = diff > 0 ? Direction.Right : Direction.Left;
-  // let newNextStepDone: number = distance % step;
-  let newNextStepDone: number = 0;
-  newNextStepDone = direction === Direction.Right ?
-    newNextStepDone:
-    -newNextStepDone;
-  // const newLastX = x1;
+  let nextStepDone: number = distance % step;
+  const lastX = direction === Direction.Right ?
+    x1 - nextStepDone:
+    x1 + nextStepDone;
 
   return {
-    nextStepDone: newNextStepDone,
+    nextStepDone: nextStepDone,
     direction,
     distanceInSteps,
-    lastX: x1
+    lastX
   };
 };
 

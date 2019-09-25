@@ -5,38 +5,6 @@ import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
 import { fillScheduleWithEmpty } from '@util/util';
 
-// const schedule: IScheduleData = {
-//   id: '123123',
-//   userName: '123123',
-//   list: [
-//   //   {
-//   //   start: 0 * 60 * 1000,
-//   //   end: 60 * 60 * 1000,
-//   //   type: 1,
-//   //   id: '1'
-//   // },
-//   {
-//     start: 250 * 60 * 1000,
-//     end: 380 * 60 * 1000,
-//     type: 2,
-//     id: '2'
-//   }
-//   , {
-//     start: 720 * 60 * 1000,
-//     end: 780 * 60 * 1000,
-//     type: 2,
-//     id: '3'
-//   }
-//   , {
-//     start: 1020 * 60 * 1000,
-//     end: 1080 * 60 * 1000,
-//     type: 2,
-//     id: '4'
-//   }
-// ]
-// };
-
-
 const schedule: IScheduleData = {
   id: '123123',
   userName: '123123',
@@ -48,14 +16,14 @@ const schedule: IScheduleData = {
   //   id: '1'
   // },
   {
-    start: 100,
-    end: 200,
+    start: 250 * 60 * 1000,
+    end: 380 * 60 * 1000,
     type: 2,
     id: '2'
   }
   , {
-    start: 400,
-    end: 500,
+    start: 720 * 60 * 1000,
+    end: 780 * 60 * 1000,
     type: 2,
     id: '3'
   }
@@ -67,6 +35,7 @@ const schedule: IScheduleData = {
   }
 ]
 };
+
 
 const data: IScheduleData[] = [schedule
   // , {...schedule, id: '1'}
