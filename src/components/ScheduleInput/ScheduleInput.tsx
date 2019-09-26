@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { findIndex, isEqual, find } from 'lodash';
+import { findIndex, isEqual, find, last } from 'lodash';
 
 import ScheduleInterval from '../ScheduleInterval/ScheduleInterval';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
@@ -8,6 +8,7 @@ import { IAppState } from '@redux/store';
 import { IUiState } from '@redux/uiState/uiStateStore';
 import { MovementData } from '@models/MovementData';
 import { IScheduleData } from '@models/IScheduleData';
+import { ActivityType } from '@models/ActivityType';
 
 import { updateSchedule } from '@redux/scheduleLists/ScheduleListsStore';
 
@@ -24,7 +25,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const uiState: IUiState = useSelector((state: IAppState) => state.uiState);
   const { list } = data;
   const dispatch: Function = useDispatch();
-  const [localList, setLocalList] = useState(list);
+  const [localList, setLocalList] = useState<ScheduleIntervalData[]>(list);
   const [itemInFocus, setItemInFocus] = useState<string | null>(null);
   const domNode = useRef<HTMLDivElement>(null);
 
@@ -40,6 +41,28 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const atLeastMinWidth = (interval: ScheduleIntervalData): boolean => {
     const { start, end } = interval;
     return end - start >= stepSizeInMs;
+  };
+
+  const collapseSameType = (
+    list: ScheduleIntervalData[], changedItemId: string
+  ): ScheduleIntervalData[] => {
+
+    const newList: ScheduleIntervalData[] = [];
+    let prevType: ActivityType | null = null;
+    list.forEach((item: ScheduleIntervalData) => {
+      const { type, end, id } = item;
+      if (type === prevType) {
+        const lastItem = last(newList)!;
+        lastItem.end = end;
+        if (changedItemId === id) {
+          lastItem.id = changedItemId;
+        }
+      } else {
+        newList.push(item);
+        prevType = type;
+      }
+    });
+    return newList;
   };
 
   const onIntervalChange = (intervalData: ScheduleIntervalData) => {
@@ -78,7 +101,9 @@ const ScheduleInput = (props: IScheduleInputProps) => {
       }
     }
 
-    setLocalList([...prevItems, intervalData, ...nextItems]);
+    const newList = collapseSameType([...prevItems, intervalData, ...nextItems], intervalId);
+
+    setLocalList(newList);
   };
 
   const onResizeLeft = (movementData: MovementData, intervalId: string) => {
