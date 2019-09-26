@@ -99,14 +99,30 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     });
   };
 
-  const onItemFocus = (id: string) => {
-    setItemInFocus(id);
-  };
+  const onIntervalMove = (movementData: MovementData, intervalId: string) => {
+    setLocalList((localList) => {
+      const interval = find(localList, { id: intervalId })!;
+      const { diffInMs } = movementData;
+      const { end, start } = interval;
 
-  const onItemBlur = (id: string) => {
-    if (id === itemInFocus) {
-      setItemInFocus(null);
-    }
+      let newEnd = end + diffInMs;
+      if (newEnd > scheduleLength) {
+        newEnd = scheduleLength;
+      } else if (newEnd < start + stepSizeInMs) {
+        newEnd = start + stepSizeInMs;
+      }
+      
+      let newStart = start + diffInMs;
+      if (newStart < 0) {
+        newStart = 0;
+      } else if (newStart > end - stepSizeInMs) {
+        newStart = end - stepSizeInMs;
+      }
+      
+      onIntervalChange({ ...interval, start: newStart, end: newEnd });
+      console.log('onIntervalMove');
+      return localList;
+    });
   };
 
   const onOutsideClick = (event: Event) => {
@@ -136,8 +152,8 @@ const ScheduleInput = (props: IScheduleInputProps) => {
         inputId={id}
         onResizeLeft={onResizeLeft}
         onResizeRight={onResizeRight}
-        onFocus={onItemFocus}
-        onBlur={onItemBlur}
+        onMove={onIntervalMove}
+        onFocus={setItemInFocus}
         isInFocus={itemInFocus === item.id}
       />;
     })}

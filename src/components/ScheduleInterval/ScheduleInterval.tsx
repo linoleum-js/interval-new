@@ -3,6 +3,7 @@ import React, { CSSProperties, useEffect, useRef, Ref } from 'react';
 import { useSelector } from 'react-redux';
 
 import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
+import ScheduleIntervalBody from '../ScheduleIntervalBody/ScheduleIntervalBody';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
@@ -21,8 +22,8 @@ export interface IScheduleIntervalProps {
   inputId: string;
   onResizeLeft: (movementData: MovementData, id: string) => void;
   onResizeRight: (movementData: MovementData, id: string) => void;
+  onMove: (movementData: MovementData, id: string) => void;
   onFocus: (id: string) => void;
-  onBlur: (id: string) => void;
   isInFocus: boolean;
 }
 
@@ -30,7 +31,7 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
-  const { onChangeFinish, onFocus, onBlur, isInFocus } = props;
+  const { onChangeFinish, onFocus, isInFocus, onMove } = props;
   const { data } = props;
 
   const { start, end, type, id } = data;
@@ -55,6 +56,10 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
     props.onResizeRight(movementData, id);
   };
 
+  const onBodyMove = (movementData: MovementData) => {
+    onMove(movementData, id);
+  };
+
 
   return <div
     className={css.ScheduleInterval}
@@ -69,12 +74,15 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
           onMove={onResizeLeft}
           onMoveEnd={onChangeFinish}
         />
+        <ScheduleIntervalBody
+          onMove={onBodyMove}
+          onMoveEnd={onChangeFinish}
+        />
         <ScheduleIntervalHandle
           direction={Direction.Right}
           value={end}
           onMove={onResizeRight}
           onMoveEnd={onChangeFinish}
-          id={id}
         />
       </>
     }
