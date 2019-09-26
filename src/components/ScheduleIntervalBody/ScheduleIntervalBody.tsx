@@ -14,4 +14,4 @@ const ScheduleIntervalBody = (props: IScheduleIntervalBodyProps) => {
   return <div className={`${css.ScheduleIntervalBody}`}></div>;
 };
 
-export default movableElement(ScheduleIntervalBody);
+export default movableElement<IScheduleIntervalBodyProps>(ScheduleIntervalBody);

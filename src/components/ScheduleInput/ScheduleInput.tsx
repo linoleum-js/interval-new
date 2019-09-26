@@ -37,34 +37,48 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     setLocalList(list);
   }, []);
 
+  const atLeastMinWidth = (interval: ScheduleIntervalData): boolean => {
+    const { start, end } = interval;
+    return end - start >= stepSizeInMs;
+  };
+
   const onIntervalChange = (intervalData: ScheduleIntervalData) => {
-    const { start, end, type, id: intervalId } = intervalData;
+    let { start, end, type, id: intervalId } = intervalData;
     const changedDataIndex: number = findIndex(localList, { id: intervalId });
     let prevItems: ScheduleIntervalData[] = localList.slice(0, changedDataIndex);
     let nextItems: ScheduleIntervalData[] = localList.slice(changedDataIndex + 1);
 
-    // If an interval item has changed, we have to update the previous
-    // and next items.
-
     if (prevItems.length) {
-      const lastItem: ScheduleIntervalData = prevItems.pop()!;
-      // set the previous item's end where the current item's start is
-      prevItems = [...prevItems, { ...lastItem, end: start }];
+      let prevItem: ScheduleIntervalData = prevItems.pop()!;
+      if (!atLeastMinWidth(prevItem)) {
+        let newPrevItem = prevItems.pop();
+        if (!newPrevItem) {
+          start = 0;
+          prevItems = [];
+        } else {
+          prevItems = [...prevItems, { ...newPrevItem, end: start }];
+        }
+      } else {
+        prevItems = [...prevItems, { ...prevItem, end: start }];
+      }
     }
+
     if (nextItems.length) {
-      const firstItem: ScheduleIntervalData = nextItems.shift()!;
-      // set the next item's end where the current item's end is
-      nextItems = [{ ...firstItem, start: end }, ...nextItems];
+      let nextItem: ScheduleIntervalData = nextItems.shift()!;
+      if (!atLeastMinWidth(nextItem)) {
+        let newNextItem = nextItems.shift();
+        if (!newNextItem) {
+          end = scheduleLength;
+          nextItems = [];
+        } else {
+          nextItems = [{ ...newNextItem, start: end }, ...nextItems];
+        }
+      } else {
+        nextItems = [{ ...nextItem, start: end }, ...nextItems];
+      }
     }
 
     setLocalList([...prevItems, intervalData, ...nextItems]);
-  };
-
-  const onChangeFinish = () => {
-    dispatch(updateSchedule({
-      ...data,
-      list: localList
-    }));
   };
 
   const onResizeLeft = (movementData: MovementData, intervalId: string) => {
@@ -106,23 +120,30 @@ const ScheduleInput = (props: IScheduleInputProps) => {
       const { end, start } = interval;
 
       let newEnd = end + diffInMs;
+      let newStart = start + diffInMs;
+
       if (newEnd > scheduleLength) {
+        const diff = newEnd - scheduleLength;
         newEnd = scheduleLength;
-      } else if (newEnd < start + stepSizeInMs) {
-        newEnd = start + stepSizeInMs;
+        newStart -= diff;
       }
       
-      let newStart = start + diffInMs;
       if (newStart < 0) {
+        const diff = newStart;
         newStart = 0;
-      } else if (newStart > end - stepSizeInMs) {
-        newStart = end - stepSizeInMs;
+        newEnd -= diff
       }
       
       onIntervalChange({ ...interval, start: newStart, end: newEnd });
-      console.log('onIntervalMove');
       return localList;
     });
+  };
+
+  const onChangeFinish = () => {
+    dispatch(updateSchedule({
+      ...data,
+      list: localList
+    }));
   };
 
   const onOutsideClick = (event: Event) => {

@@ -34,4 +34,4 @@ const ScheduleIntervalHandle = (props: IScheduleIntervalHandleProps) => {
   </div>;
 };
 
-export default movableElement(ScheduleIntervalHandle);
+export default movableElement<IScheduleIntervalHandleProps>(ScheduleIntervalHandle);

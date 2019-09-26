@@ -86,6 +86,8 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
         />
       </>
     }
+    
+    {id}
   </div>;
 };
 
