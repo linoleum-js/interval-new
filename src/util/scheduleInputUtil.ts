@@ -4,6 +4,7 @@ import { IScheduleData } from '@models/IScheduleData';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { ActivityType } from '@models/ActivityType';
 import { scheduleLength, stepSizeInMs } from '@constants/constants';
+import { findIndex, isEqual, find, last } from 'lodash';
 
 export const pad2 = (value: string): string => {
   return value.length === 2 ? value : `0${value}`;
@@ -83,4 +84,27 @@ export const addEmptyBoundaries = (data: IScheduleData): IScheduleData => {
     ...data,
     list: newList
   };
+};
+
+
+export const collapseSameType = (
+  list: ScheduleIntervalData[], changedItemId?: string
+): ScheduleIntervalData[] => {
+
+  const newList: ScheduleIntervalData[] = [];
+  let prevType: ActivityType | null = null;
+  list.forEach((item: ScheduleIntervalData) => {
+    const { type, end, id } = item;
+    if (type === prevType) {
+      const lastItem = last(newList)!;
+      lastItem.end = end;
+      if (changedItemId && changedItemId === id) {
+        lastItem.id = changedItemId;
+      }
+    } else {
+      newList.push(item);
+      prevType = type;
+    }
+  });
+  return newList;
 };

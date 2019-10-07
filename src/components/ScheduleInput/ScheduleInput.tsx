@@ -10,6 +10,7 @@ import { MovementData } from '@models/MovementData';
 import { IScheduleData } from '@models/IScheduleData';
 import { ActivityType } from '@models/ActivityType';
 import { Direction } from '@models/Direction';
+import { collapseSameType } from '@util/scheduleInputUtil';
 
 import { updateSchedule } from '@redux/scheduleLists/ScheduleListsStore';
 
@@ -43,28 +44,6 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const atLeastMinWidth = (interval: ScheduleIntervalData): boolean => {
     const { start, end } = interval;
     return Math.abs(end - start) >= stepSizeInMs;
-  };
-
-  const collapseSameType = (
-    list: ScheduleIntervalData[], changedItemId?: string
-  ): ScheduleIntervalData[] => {
-
-    const newList: ScheduleIntervalData[] = [];
-    let prevType: ActivityType | null = null;
-    list.forEach((item: ScheduleIntervalData) => {
-      const { type, end, id } = item;
-      if (type === prevType) {
-        const lastItem = last(newList)!;
-        lastItem.end = end;
-        if (changedItemId && changedItemId === id) {
-          lastItem.id = changedItemId;
-        }
-      } else {
-        newList.push(item);
-        prevType = type;
-      }
-    });
-    return newList;
   };
 
   const onIntervalChange = (intervalData: ScheduleIntervalData) => {
@@ -103,17 +82,19 @@ const ScheduleInput = (props: IScheduleInputProps) => {
       }
     }
 
-    const newList = collapseSameType([...prevItems, intervalData, ...nextItems], intervalId);
+    const newList: ScheduleIntervalData[] = collapseSameType(
+      [...prevItems, intervalData, ...nextItems], intervalId
+    );
 
     setLocalList(newList);
   };
 
   const onResizeLeft = (movementData: MovementData, intervalId: string) => {
     setLocalList((localList) => {
-      const interval = find(localList, { id: intervalId })!;
+      const interval: ScheduleIntervalData = find(localList, { id: intervalId })!;
       const { diffInMs } = movementData;
       const { start, end } = interval;
-      let newStart = start + diffInMs;
+      let newStart: number = start + diffInMs;
       if (newStart < 0) {
         newStart = 0;
       } else if (newStart > end - stepSizeInMs) {
@@ -126,10 +107,10 @@ const ScheduleInput = (props: IScheduleInputProps) => {
 
   const onResizeRight = (movementData: MovementData, intervalId: string) => {
     setLocalList((localList) => {
-      const interval = find(localList, { id: intervalId })!;
+      const interval: ScheduleIntervalData = find(localList, { id: intervalId })!;
       const { diffInMs } = movementData;
       const { end, start } = interval;
-      let newEnd = end + diffInMs;
+      let newEnd: number = end + diffInMs;
       if (newEnd > scheduleLength) {
         newEnd = scheduleLength;
       } else if (newEnd < start + stepSizeInMs) {
@@ -142,21 +123,21 @@ const ScheduleInput = (props: IScheduleInputProps) => {
 
   const onIntervalMove = (movementData: MovementData, intervalId: string) => {
     setLocalList((localList) => {
-      const interval = find(localList, { id: intervalId })!;
+      const interval: ScheduleIntervalData = find(localList, { id: intervalId })!;
       const { diffInMs } = movementData;
       const { end, start } = interval;
 
-      let newEnd = end + diffInMs;
-      let newStart = start + diffInMs;
+      let newEnd: number = end + diffInMs;
+      let newStart: number = start + diffInMs;
 
       if (newEnd > scheduleLength) {
-        const diff = newEnd - scheduleLength;
+        const diff: number = newEnd - scheduleLength;
         newEnd = scheduleLength;
         newStart -= diff;
       }
       
       if (newStart < 0) {
-        const diff = newStart;
+        const diff: number = newStart;
         newStart = 0;
         newEnd -= diff
       }
@@ -174,15 +155,49 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   };
 
   const onOutsideClick = (event: Event) => {
-    const target = event.target as Node;
+    const target: Node = event.target as Node;
     if (domNode.current && !domNode.current.contains(target)) {
       setItemInFocus(null);
       setItemMenuOpen(null);
     }
   };
 
-  const onCreate = (id: string, position: Direction) => {
-
+  const onCreate = (intervalId: string, position: Direction) => {
+    // creating left to the item
+    const index: number = findIndex(localList, { id: intervalId });
+    const prevItem: ScheduleIntervalData = localList[index - 1];
+    const item: ScheduleIntervalData = localList[index];
+    const { Work, Break, Lunch } = ActivityType;
+    const types: ActivityType[] = [Work, Break, Lunch];
+    const allowedType: ActivityType[] = types.filter((type) => {
+      return (!prevItem || prevItem.type !== type) &&
+        (!item || item.type !== type);
+    });
+    const newType: ActivityType = allowedType[0];
+    const { start, end, type } = item;
+    const halfWidth: number = Math.floor((end - start) / stepSizeInMs / 2) * stepSizeInMs;
+    const middle: number = start + halfWidth;
+    let newItems: ScheduleIntervalData[] = [];
+    if (position === Direction.Left) {
+      newItems = [
+        new ScheduleIntervalData(start, middle, newType),
+        new ScheduleIntervalData(middle, end, type)
+      ];
+    } else {
+      newItems = [
+        new ScheduleIntervalData(start, middle, type),
+        new ScheduleIntervalData(middle, end, newType)
+      ];
+    }
+    const newList: ScheduleIntervalData[] = [
+      ...localList.slice(0, index),
+      ...newItems,
+      ...localList.slice(index + 1)
+    ];
+    dispatch(updateSchedule({
+      ...data,
+      list: newList
+    }));
   };
 
   const onRemove = (id: string) => {
@@ -195,6 +210,11 @@ const ScheduleInput = (props: IScheduleInputProps) => {
 
   const onTypeChange = (id: string, type: ActivityType) => {
 
+  };
+
+  const canCreateInside = (data: ScheduleIntervalData) => {
+    const { start, end } = data;
+    return end - start >= stepSizeInMs * 2;
   };
 
   useEffect(() => {
@@ -225,6 +245,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
         onRemove={onRemove}
         onCreate={onCreate}
         onTypeChange={onTypeChange}
+        canCreateInside={canCreateInside(item)}
       />;
     })}
   </div>;

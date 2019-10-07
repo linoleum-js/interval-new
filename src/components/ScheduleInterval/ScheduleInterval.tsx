@@ -1,5 +1,5 @@
 
-import React, { CSSProperties, useEffect } from 'react';
+import React, { CSSProperties, useEffect, useState, useRef, Ref } from 'react';
 import { useSelector } from 'react-redux';
 
 import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
@@ -31,14 +31,15 @@ export interface IScheduleIntervalProps {
   onRemove: (id: string) => void;
   onCreate: (id: string, position: Direction) => void;
   onTypeChange: (id: string, type: ActivityType) => void;
+  canCreateInside: boolean;
 }
 
 const ScheduleInterval = (props: IScheduleIntervalProps) => {
-  const uiState: IUiState = useSelector((state: IAppState) =>
-    state.uiState
-  );
+  const uiState: IUiState = useSelector((state: IAppState) => state.uiState);
+  const [menuPosition, setMenuPosition] = useState<{x: number, y: number}>({x: 0, y: 0});
+  const element: Ref<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { onChangeFinish, onFocus, isInFocus, onMove, onMenuOpen,
-    isMenuOpen, onRemove, onCreate, onTypeChange } = props;
+    isMenuOpen, onRemove, onCreate, onTypeChange, canCreateInside } = props;
   const { data } = props;
 
   const { start, end, type, id } = data;
@@ -68,8 +69,16 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   };
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const { clientX, clientY } = event;
+    setMenuPosition({ x: clientX, y: clientY });
     event.preventDefault();
     onMenuOpen(id);
+  };
+
+  const getCreationPosition = (): Direction => {
+    const { x, width } = element.current!.getBoundingClientRect() as DOMRect;
+    const diff: number = menuPosition.x - x;
+    return diff < width / 2 ? Direction.Left : Direction.Right;
   };
 
   const onDocumentContextMenu = () => {
@@ -84,16 +93,20 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   });
 
   let contextMenuItems = [{
-    name: 'create',
-    label: 'Create',
-    onClick: () => onCreate(id, Direction.Left)
-  }, {
     name: 'typeChange',
     label: 'Change type',
     onClick: () => {
       console.log('change type');
     }
   }];
+
+  if (canCreateInside) {
+    contextMenuItems = [{
+      name: 'create',
+      label: 'Create',
+      onClick: () => onCreate(id, getCreationPosition())
+    }, ...contextMenuItems];
+  }
 
   if (!isEmpty) {
     contextMenuItems = [{
@@ -108,6 +121,7 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
     style={style}
     onPointerDown={() => onFocus(id)}
     onContextMenu={onContextMenu}
+    ref={element}
   >
     {!isEmpty && isInFocus &&
       <>
