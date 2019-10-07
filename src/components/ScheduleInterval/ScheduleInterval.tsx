@@ -74,10 +74,6 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
           onMove={onResizeLeft}
           onMoveEnd={onChangeFinish}
         />
-        <ScheduleIntervalBody
-          onMove={onBodyMove}
-          onMoveEnd={onChangeFinish}
-        />
         <ScheduleIntervalHandle
           direction={Direction.Right}
           value={end}
@@ -85,6 +81,12 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
           onMoveEnd={onChangeFinish}
         />
       </>
+    }
+    {!isEmpty && 
+      <ScheduleIntervalBody
+        onMove={onBodyMove}
+        onMoveEnd={onChangeFinish}
+      />
     }
     
     {id}

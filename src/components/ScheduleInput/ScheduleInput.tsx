@@ -36,11 +36,11 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     // dragging stuff around, and then dispatch only when it's done
     // (on MouseUp or PointerUp events, see onChangeFinish)
     setLocalList(list);
-  }, []);
+  }, [list]);
 
   const atLeastMinWidth = (interval: ScheduleIntervalData): boolean => {
     const { start, end } = interval;
-    return end - start >= stepSizeInMs;
+    return Math.abs(end - start) >= stepSizeInMs;
   };
 
   const collapseSameType = (

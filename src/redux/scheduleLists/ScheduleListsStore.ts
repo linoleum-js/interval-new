@@ -3,7 +3,7 @@ import { findIndex } from 'lodash';
 
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
-import { fillScheduleWithEmpty } from '@util/util';
+import { fillScheduleWithEmpty, addEmptyBoundaries } from '@util/util';
 
 const schedule: IScheduleData = {
   id: '123123',
@@ -63,8 +63,8 @@ export enum ScheduleActionTypes {
 }
 
 export interface ScheduleActionPayload {
-  list?: IScheduleData[];
-  schedule?: IScheduleData;
+  list: IScheduleData[];
+  schedule: IScheduleData;
 }
 
 export interface RequestScheduleListAction {
@@ -134,7 +134,7 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
 
       return {
         isLoading: false,
-        list: [...prevItems, schedule, ...nextItems]
+        list: [...prevItems, addEmptyBoundaries(schedule), ...nextItems]
       };
   }
 

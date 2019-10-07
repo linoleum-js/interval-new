@@ -66,3 +66,21 @@ export const fillScheduleWithEmpty = (data: IScheduleData): IScheduleData => {
     list: newList
   };
 };
+
+export const addEmptyBoundaries = (data: IScheduleData): IScheduleData => {
+  const { list } = data;
+  const newList: ScheduleIntervalData[] = [...list];
+
+  const first = list[0];
+  if (first.start !== 0) {
+    newList.unshift(new ScheduleIntervalData(0, first.start, ActivityType.Empty));
+  }
+  const last = list[list.length - 1];
+  if (last.end !== scheduleLength) {
+    newList.push(new ScheduleIntervalData(last.end, scheduleLength, ActivityType.Empty));
+  }
+  return {
+    ...data,
+    list: newList
+  };
+};
