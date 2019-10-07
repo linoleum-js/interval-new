@@ -9,6 +9,7 @@ import { IUiState } from '@redux/uiState/uiStateStore';
 import { MovementData } from '@models/MovementData';
 import { IScheduleData } from '@models/IScheduleData';
 import { ActivityType } from '@models/ActivityType';
+import { Direction } from '@models/Direction';
 
 import { updateSchedule } from '@redux/scheduleLists/ScheduleListsStore';
 
@@ -27,6 +28,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const dispatch: Function = useDispatch();
   const [localList, setLocalList] = useState<ScheduleIntervalData[]>(list);
   const [itemInFocus, setItemInFocus] = useState<string | null>(null);
+  const [itemMenuOpen, setItemMenuOpen] = useState<string | null>(null);
   const domNode = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   };
 
   const collapseSameType = (
-    list: ScheduleIntervalData[], changedItemId: string
+    list: ScheduleIntervalData[], changedItemId?: string
   ): ScheduleIntervalData[] => {
 
     const newList: ScheduleIntervalData[] = [];
@@ -54,7 +56,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
       if (type === prevType) {
         const lastItem = last(newList)!;
         lastItem.end = end;
-        if (changedItemId === id) {
+        if (changedItemId && changedItemId === id) {
           lastItem.id = changedItemId;
         }
       } else {
@@ -175,7 +177,24 @@ const ScheduleInput = (props: IScheduleInputProps) => {
     const target = event.target as Node;
     if (domNode.current && !domNode.current.contains(target)) {
       setItemInFocus(null);
+      setItemMenuOpen(null);
     }
+  };
+
+  const onCreate = (id: string, position: Direction) => {
+
+  };
+
+  const onRemove = (id: string) => {
+    const newList = localList.filter((item) => item.id !== id);
+    dispatch(updateSchedule({
+      ...data,
+      list: collapseSameType(newList)
+    }));
+  };
+
+  const onTypeChange = (id: string, type: ActivityType) => {
+
   };
 
   useEffect(() => {
@@ -200,7 +219,12 @@ const ScheduleInput = (props: IScheduleInputProps) => {
         onResizeRight={onResizeRight}
         onMove={onIntervalMove}
         onFocus={setItemInFocus}
+        onMenuOpen={setItemMenuOpen}
         isInFocus={itemInFocus === item.id}
+        isMenuOpen={itemMenuOpen === item.id}
+        onRemove={onRemove}
+        onCreate={onCreate}
+        onTypeChange={onTypeChange}
       />;
     })}
   </div>;

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { msToHHMM } from '@util/util';
+import { msToHHMM } from '@util/scheduleInputUtil';
 import { Direction } from '@models/Direction';
 
 import {

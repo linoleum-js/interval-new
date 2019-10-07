@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 // @ts-ignore
 import { useThrottleCallback } from '@react-hook/throttle';
 
-import { getMovementdata } from '@util/util';
+import { getMovementdata } from '@util/scheduleInputUtil';
 import { MovementData } from '@models/MovementData';
 import { IUiState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';

@@ -1,9 +1,10 @@
 
-import React, { CSSProperties, useEffect, useRef, Ref } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
 import ScheduleIntervalBody from '../ScheduleIntervalBody/ScheduleIntervalBody';
+import ScheduleIntervalContextMenu from '../ScheduleIntervalContextMenu/ScheduleIntervalContextMenu';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
@@ -24,14 +25,20 @@ export interface IScheduleIntervalProps {
   onResizeRight: (movementData: MovementData, id: string) => void;
   onMove: (movementData: MovementData, id: string) => void;
   onFocus: (id: string) => void;
+  onMenuOpen: (id: string|null) => void;
   isInFocus: boolean;
+  isMenuOpen: boolean;
+  onRemove: (id: string) => void;
+  onCreate: (id: string, position: Direction) => void;
+  onTypeChange: (id: string, type: ActivityType) => void;
 }
 
 const ScheduleInterval = (props: IScheduleIntervalProps) => {
   const uiState: IUiState = useSelector((state: IAppState) =>
     state.uiState
   );
-  const { onChangeFinish, onFocus, isInFocus, onMove } = props;
+  const { onChangeFinish, onFocus, isInFocus, onMove, onMenuOpen,
+    isMenuOpen, onRemove, onCreate, onTypeChange } = props;
   const { data } = props;
 
   const { start, end, type, id } = data;
@@ -60,11 +67,47 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
     onMove(movementData, id);
   };
 
+  const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.preventDefault();
+    onMenuOpen(id);
+  };
+
+  const onDocumentContextMenu = () => {
+    onMenuOpen(null);
+  };
+
+  useEffect(() => {
+    document.addEventListener('contextmenu', onDocumentContextMenu);
+    return () => {
+      document.removeEventListener('contextmenu', onDocumentContextMenu);
+    };
+  });
+
+  let contextMenuItems = [{
+    name: 'create',
+    label: 'Create',
+    onClick: () => onCreate(id, Direction.Left)
+  }, {
+    name: 'typeChange',
+    label: 'Change type',
+    onClick: () => {
+      console.log('change type');
+    }
+  }];
+
+  if (!isEmpty) {
+    contextMenuItems = [{
+      name: 'remove',
+      label: 'Remove',
+      onClick: () => onRemove(id)
+    }, ...contextMenuItems];
+  }
 
   return <div
     className={css.ScheduleInterval}
     style={style}
     onPointerDown={() => onFocus(id)}
+    onContextMenu={onContextMenu}
   >
     {!isEmpty && isInFocus &&
       <>
@@ -82,14 +125,19 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
         />
       </>
     }
-    {!isEmpty && 
-      <ScheduleIntervalBody
-        onMove={onBodyMove}
-        onMoveEnd={onChangeFinish}
+
+    <ScheduleIntervalBody
+      onMove={onBodyMove}
+      onMoveEnd={onChangeFinish}
+    />
+
+    {isMenuOpen &&
+      <ScheduleIntervalContextMenu
+        items={contextMenuItems}
       />
     }
-    
-    {id}
+
+    {/* {id} */}
   </div>;
 };
 

@@ -3,7 +3,7 @@ import { findIndex } from 'lodash';
 
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
-import { fillScheduleWithEmpty, addEmptyBoundaries } from '@util/util';
+import { fillScheduleWithEmpty, addEmptyBoundaries } from '@util/scheduleInputUtil';
 
 const schedule: IScheduleData = {
   id: '123123',
@@ -38,17 +38,17 @@ const schedule: IScheduleData = {
 
 
 const data: IScheduleData[] = [schedule
-  // , {...schedule, id: '1'}
-  // , {...schedule, id: '2'}
-  // , {...schedule, id: '3'}
-  // , {...schedule, id: '4'}
-  // , {...schedule, id: '5'}
-  // , {...schedule, id: '6'}
-  // , {...schedule, id: '7'}
-  // , {...schedule, id: '8'}
-  // , {...schedule, id: '9'}
-  // , {...schedule, id: '10'}
-  // , {...schedule, id: '11'}
+  , {...schedule, id: '1'}
+  , {...schedule, id: '2'}
+  , {...schedule, id: '3'}
+  , {...schedule, id: '4'}
+  , {...schedule, id: '5'}
+  , {...schedule, id: '6'}
+  , {...schedule, id: '7'}
+  , {...schedule, id: '8'}
+  , {...schedule, id: '9'}
+  , {...schedule, id: '10'}
+  , {...schedule, id: '11'}
 ];
 
 export interface IScheduleListState {
