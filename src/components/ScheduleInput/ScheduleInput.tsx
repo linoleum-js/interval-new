@@ -43,7 +43,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
 
   const atLeastMinWidth = (interval: ScheduleIntervalData): boolean => {
     const { start, end } = interval;
-    return Math.abs(end - start) >= stepSizeInMs;
+    return end - start >= stepSizeInMs;
   };
 
   const onIntervalChange = (intervalData: ScheduleIntervalData) => {
@@ -248,6 +248,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
         canCreateInside={canCreateInside(item)}
       />;
     })}
+    {/* <div style={{ position: 'absolute' }}>{localList.length}</div> */}
   </div>;
 };
 

@@ -3,35 +3,33 @@ import { findIndex } from 'lodash';
 
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
-import { fillScheduleWithEmpty, addEmptyBoundaries } from '@util/scheduleInputUtil';
+import {
+  fillScheduleWithEmpty, addEmptyBoundaries, generateIds
+} from '@util/scheduleInputUtil';
 
-const schedule: IScheduleData = {
+const schedule: any = {
   id: '123123',
   userName: '123123',
   list: [
-  //   {
-  //   start: 0 * 60 * 1000,
-  //   end: 60 * 60 * 1000,
-  //   type: 1,
-  //   id: '1'
-  // },
+    {
+    start: 0 * 60 * 1000,
+    end: 60 * 60 * 1000,
+    type: 1
+  },
   {
     start: 250 * 60 * 1000,
     end: 380 * 60 * 1000,
-    type: 2,
-    id: '2'
+    type: 2
   }
   , {
     start: 720 * 60 * 1000,
     end: 780 * 60 * 1000,
-    type: 2,
-    id: '3'
+    type: 2
   }
   , {
     start: 1020 * 60 * 1000,
     end: 1080 * 60 * 1000,
-    type: 2,
-    id: '4'
+    type: 2
   }
 ]
 };
@@ -96,7 +94,7 @@ export const updateSchedule = (data: IScheduleData) => (dispatch: Function) => {
 export const fetchScheduleList = () => async (dispatch: Function) => {
   dispatch({
     type: ScheduleActionTypes.ReceiveScheduleList,
-    payload: data.map((item: IScheduleData) => fillScheduleWithEmpty(item))
+    payload: data.map((item: IScheduleData) => fillScheduleWithEmpty(generateIds(item)))
   });
 };
 

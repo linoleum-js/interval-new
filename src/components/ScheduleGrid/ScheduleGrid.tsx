@@ -37,6 +37,7 @@ const ScheduleGrid = (props: IGridProps) => {
   }, 150);
 
   useEffect(() => recalcGridDimensions(), []);
+  useEffect(() => { setTimeout(recalcGridDimensions, 100) }, []);
 
   useEffect(() => {
     window.addEventListener('resize', recalcGridDimensions);

@@ -108,3 +108,18 @@ export const collapseSameType = (
   });
   return newList;
 };
+
+export const generateIds = (data: IScheduleData): IScheduleData => {
+  const { list } = data;
+  let newList: ScheduleIntervalData[] = [];
+
+  newList = list.map((item: ScheduleIntervalData) => {
+    const { start, end, type } = item;
+    return new ScheduleIntervalData(start, end, type);
+  });
+
+  return {
+    ...data,
+    list: newList
+  };
+};

@@ -65,6 +65,9 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   };
 
   const onBodyMove = (movementData: MovementData) => {
+    if (isEmpty) {
+      return;
+    }
     onMove(movementData, id);
   };
 
@@ -142,7 +145,12 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
 
     <ScheduleIntervalBody
       onMove={onBodyMove}
-      onMoveEnd={onChangeFinish}
+      onMoveEnd={() => {
+        if (isEmpty) {
+          return;
+        }
+        onChangeFinish();
+      }}
     />
 
     {isMenuOpen &&
