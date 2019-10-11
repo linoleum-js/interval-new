@@ -1,7 +1,8 @@
 import { Reducer, Action } from 'redux';
 import { findIndex } from 'lodash';
+// @ts-ignore
+import undoable from 'redux-undo';
 
-import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
 import { IScheduleData } from '@models/IScheduleData';
 import {
   fillScheduleWithEmpty, addEmptyBoundaries, generateIds
@@ -57,7 +58,9 @@ export interface IScheduleListState {
 export enum ScheduleActionTypes {
   RequestScheduleList = 'REQUEST_SCHEDULE_LIST',
   ReceiveScheduleList = 'RECEIVE_SCHEDULE_LIST',
-  UpdateScheduleList = 'UPDATE_SCHEDULE_LIST'
+  UpdateScheduleList = 'UPDATE_SCHEDULE_LIST',
+  UndoUpdateScheduleList = 'UNDO_UPDATE_SCHEDULE_LIST',
+  RedoUpdateScheduleList = 'REDO_UPDATE_SCHEDULE_LIST',
 }
 
 export interface ScheduleActionPayload {
@@ -98,12 +101,24 @@ export const fetchScheduleList = () => async (dispatch: Function) => {
   });
 };
 
+export const undoUpdateSchedule = () => {
+  return {
+    type: ScheduleActionTypes.UndoUpdateScheduleList
+  };
+};
+
+export const redoUpdateSchedule = () => {
+  return {
+    type: ScheduleActionTypes.RedoUpdateScheduleList
+  };
+};
+
 const initialState: IScheduleListState = {
   list: [],
   isLoading: false
 };
 
-export const scheduleListsReducer: Reducer<IScheduleListState> = (
+const scheduleListsReducerBody: Reducer<IScheduleListState> = (
   state: IScheduleListState = initialState,
   action: Action
 ): IScheduleListState => {
@@ -138,3 +153,10 @@ export const scheduleListsReducer: Reducer<IScheduleListState> = (
 
   return state;
 };
+
+export const scheduleListsReducer = undoable(scheduleListsReducerBody, {
+  undoType: ScheduleActionTypes.UndoUpdateScheduleList,
+  redoType: ScheduleActionTypes.RedoUpdateScheduleList,
+  initTypes: ['@@redux-undo/INIT', ScheduleActionTypes.ReceiveScheduleList],
+  ignoreInitialState: true
+})

@@ -32,8 +32,6 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const [itemMenuOpen, setItemMenuOpen] = useState<string | null>(null);
   const domNode = useRef<HTMLDivElement>(null);
 
-  console.log('itemMenuOpen', itemMenuOpen);
-
   useEffect(() => {
     // We don't want to update store every time anything changes,
     // because it would make the undo/redo implementation not trivial.
@@ -150,6 +148,7 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   };
 
   const onChangeFinish = () => {
+    console.log('onChangeFinish');
     dispatch(updateSchedule({
       ...data,
       list: localList
