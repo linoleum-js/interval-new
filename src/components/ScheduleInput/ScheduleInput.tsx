@@ -32,6 +32,8 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   const [itemMenuOpen, setItemMenuOpen] = useState<string | null>(null);
   const domNode = useRef<HTMLDivElement>(null);
 
+  console.log('itemMenuOpen', itemMenuOpen);
+
   useEffect(() => {
     // We don't want to update store every time anything changes,
     // because it would make the undo/redo implementation not trivial.
@@ -163,7 +165,6 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   };
 
   const onCreate = (intervalId: string, position: Direction) => {
-    // creating left to the item
     const index: number = findIndex(localList, { id: intervalId });
     const prevItem: ScheduleIntervalData = localList[index - 1];
     const item: ScheduleIntervalData = localList[index];
@@ -209,7 +210,18 @@ const ScheduleInput = (props: IScheduleInputProps) => {
   };
 
   const onTypeChange = (id: string, type: ActivityType) => {
-
+    const index: number = findIndex(localList, { id });
+    const prevItems: ScheduleIntervalData[] = localList.slice(0, index);
+    const nextItems: ScheduleIntervalData[] = localList.slice(index + 1);
+    const item: ScheduleIntervalData = localList[index];
+    const newItem: ScheduleIntervalData = {
+      ...item, type
+    };
+    const newList = [...prevItems, newItem, ...nextItems];
+    dispatch(updateSchedule({
+      ...data,
+      list: newList
+    }));
   };
 
   const canCreateInside = (data: ScheduleIntervalData) => {
@@ -248,7 +260,6 @@ const ScheduleInput = (props: IScheduleInputProps) => {
         canCreateInside={canCreateInside(item)}
       />;
     })}
-    {/* <div style={{ position: 'absolute' }}>{localList.length}</div> */}
   </div>;
 };
 

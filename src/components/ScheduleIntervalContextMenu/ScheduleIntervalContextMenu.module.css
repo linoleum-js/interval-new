@@ -18,6 +18,7 @@
   font-size: 12px;
   width: 150px;
   cursor: pointer;
+  position: relative;
 }
 
 .ScheduleIntervalContextMenu li:last-child {
@@ -28,4 +29,11 @@
   background-color: #f9f9f9;
 }
 
+.ScheduleIntervalContextMenuColor {
+  height: 24px;
+  width: 25px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 

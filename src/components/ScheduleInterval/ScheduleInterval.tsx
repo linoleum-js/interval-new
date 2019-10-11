@@ -4,15 +4,14 @@ import { useSelector } from 'react-redux';
 
 import ScheduleIntervalHandle from '../ScheduleIntervalHandle/ScheduleIntervalHandle';
 import ScheduleIntervalBody from '../ScheduleIntervalBody/ScheduleIntervalBody';
-import ScheduleIntervalContextMenu from '../ScheduleIntervalContextMenu/ScheduleIntervalContextMenu';
+import ScheduleIntervalContextMenu, { IScheduleIntervalContextMenuItem } from '../ScheduleIntervalContextMenu/ScheduleIntervalContextMenu';
 import { Direction } from '@models/Direction';
 import { MovementData } from '@models/MovementData';
 import { ScheduleIntervalData } from '@models/ScheduleIntervalData';
-import { ActivityType } from '@models/ActivityType';
+import { ActivityType, activityColor, activityTypeNames } from '@models/ActivityType';
 import { IUiState } from '@redux/uiState/uiStateStore';
 import { IAppState } from '@redux/store';
 import { stepSizeInMs, scheduleLength } from '@constants/constants';
-import { activityColor } from '@constants/schedule';
 
 import css from './ScheduleInterval.module.css';
 
@@ -85,7 +84,7 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
   };
 
   const onDocumentContextMenu = () => {
-    onMenuOpen(null);
+    // onMenuOpen(null);
   };
 
   useEffect(() => {
@@ -95,12 +94,22 @@ const ScheduleInterval = (props: IScheduleIntervalProps) => {
     };
   });
 
-  let contextMenuItems = [{
+  const { Work, Lunch, Break, Empty } = ActivityType;
+  const activityTypeArray: ActivityType[] = [Work, Lunch, Break, Empty];
+
+  let contextMenuItems: IScheduleIntervalContextMenuItem[] = [{
     name: 'typeChange',
     label: 'Change type',
-    onClick: () => {
-      console.log('change type');
-    }
+    submenu: activityTypeArray.map((type: ActivityType) => {
+      return {
+        name: activityTypeNames[type],
+        label: activityTypeNames[type],
+        onClick: () => onTypeChange(id, type),
+        attrs: {
+          color: activityColor[type]
+        }
+      };
+    })
   }];
 
   if (canCreateInside) {
